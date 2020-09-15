@@ -1,0 +1,3 @@
+$includes = '';
+$bib_files = './pubs.bib ';
+$bibtex_mode = 1;

@@ -1,0 +1,118 @@
+\begin{thebibliography}{10}
+
+\bibitem{Bon:origin-tracking2007}
+Michael~D. Bond, Nicholas Nethercote, Stephen~W. Kent, Samuel~Z. Guyer, and
+  Kathryn~S. McKinley.
+\newblock Tracking bad apples: Reporting the origin of null and undefined value
+  errors.
+\newblock In {\em Proceedings of the ACM SIGPLAN International Conference on
+  Object-Oriented Programming, Systems, Languages and Applications (OOPSLA
+  2007)}, pages 405--422, Montreal, Canada, October 2007.
+
+\bibitem{Bus:trips-eval2006}
+Kevin Bush, Mark Gebhart, Eric Wei, Natalie Yudin, Bertrand Maher, Nicholas
+  Nethercote, Doug Burger, and Stephen~W. Keckler.
+\newblock Evaluation and optimization of signal processing kernels on the
+  {TRIPS} architecture.
+\newblock In {\em Proceedings of the 4th Annual Workshop on Optimizations for
+  DSP and Embedded Systems (ODES-4)}, New York, New York, USA, March 2006.
+
+\bibitem{Gar:HAL-solvers2001}
+Mar\'{\i}a {Garc\'{\i}a de la Banda}, David Jeffery, Kim Marriott, Nicholas
+  Nethercote, Peter~J. Stuckey, and Christian Holzbaur.
+\newblock Building constraint solvers with {HAL}.
+\newblock In {\em Proceedings of the 17th International Conference on Logic
+  Programming (ICLP'01)}, Paphos, Cyprus, November 2001.
+
+\bibitem{Mar:design-of-zinc2008}
+Kim Marriott, Nicholas Nethercote, Reza Rafeh, Peter~J. Stuckey, Maria~Garcia
+  de~la Banda, and Mark Wallace.
+\newblock The design of the {Z}inc modelling language.
+\newblock {\em Constraints, Special Issue on Abstraction and Automation in
+  Constraint Modelling}, 13(3):229--267, 2008.
+
+\bibitem{Net:masters2002}
+Nicholas Nethercote.
+\newblock The analysis framework of {HAL}.
+\newblock Master's thesis, Department of Computer Science and Software
+  Engineering, University of Melbourne, Australia, April 2002.
+
+\bibitem{Net:phd2004}
+Nicholas Nethercote.
+\newblock {\em Dynamic Binary Analysis and Instrumentation}.
+\newblock PhD thesis, Computer Laboratory, University of Cambridge, United
+  Kingdom, November 2004.
+
+\bibitem{Net:convergent2006}
+Nicholas Nethercote, Douglas~C. Burger, and Kathryn~S. McKinley.
+\newblock Convergent compilation applied to loop unrolling.
+\newblock {\em Transactions on High-Performance Embedded Architectures and
+  Compilers, Special Issue: Future Directions in Embedded Systems Compilation},
+  1:140--158, September 2006.
+
+\bibitem{Net:bounds-checking2004}
+Nicholas Nethercote and Jeremy Fitzhardinge.
+\newblock Bounds-checking entire programs without recompiling.
+\newblock In {\em Informal Proceedings of the Second Workshop on Semantics,
+  Program Analysis, and Computing Environments for Memory Management (SPACE
+  2004)}, Venice, Italy, January 2004.
+
+\bibitem{Net:cache-large-lazy2002}
+Nicholas Nethercote and Alan Mycroft.
+\newblock The cache behaviour of large lazy functional programs on stock
+  hardware.
+\newblock In {\em Proceedings of the ACM SIGPLAN Workshop on Memory System
+  Performance (MSP 2002)}, pages 44--55, Berlin, Germany, July 2002.
+
+\bibitem{Net:redux2003}
+Nicholas Nethercote and Alan Mycroft.
+\newblock Redux: A dynamic dataflow tracer.
+\newblock {\em Electronic Notes in Theoretical Computer Science}, 89(2), 2003.
+
+\bibitem{Net:valgrind2003}
+Nicholas Nethercote and Julian Seward.
+\newblock Valgrind: A program supervision framework.
+\newblock {\em Electronic Notes in Theoretical Computer Science}, 89(2), 2003.
+
+\bibitem{Net:shadow-memory2007}
+Nicholas Nethercote and Julian Seward.
+\newblock How to shadow every byte of memory used by a program.
+\newblock In {\em Proceedings of the Third International ACM SIGPLAN/SIGOPS
+  Conference on Virtual Execution Environments (VEE 2007)}, pages 65--74, San
+  Diego, California, USA, June 2007.
+
+\bibitem{Net:valgrind2007}
+Nicholas Nethercote and Julian Seward.
+\newblock Valgrind: A framework for heavyweight dynamic binary instrumentation.
+\newblock In {\em Proceedings of ACM SIGPLAN 2007 Conference on Programming
+  Language Design and Implementation (PLDI 2007)}, pages 89--100, San Diego,
+  California, USA, June 2007.
+
+\bibitem{Net:minizinc2007}
+Nicholas Nethercote, Peter~J. Stuckey, Ralph Becket, Sebastian Brand,
+  Gregory~J. Duck, and Guido Tack.
+\newblock Mini{Z}inc: Towards a standard {CP} modelling language.
+\newblock In {\em Proceedings of the 13th International Conference on
+  Principles and Practice of Constraint Programming (CP2007)}, Providence,
+  Rhode Island, USA, September 2007.
+
+\bibitem{Net:workload-characterization2006}
+Nicholas Nethercote, Robert Walsh, and Jeremy Fitzhardinge.
+\newblock Building workload characterization tools with {V}algrind.
+\newblock In {\em Invited tutorial, IEEE International Symposium on Workload
+  Characterization (IISWC 2006)}, San Jos\'e, California, USA, October 2006.
+
+\bibitem{Sew:memcheck2005}
+Julian Seward and Nicholas Nethercote.
+\newblock Using {V}algrind to detect undefined value errors with bit-precision.
+\newblock In {\em Proceedings of the USENIX'05 Annual Technical Conference},
+  Anaheim, California, USA, April 2005.
+
+\bibitem{Smi:trips-compiler2006}
+Aaron Smith, Jim Burrill, Jon Gibson, Bertrand Maher, Nicholas Nethercote, Bill
+  Yoder, Doug Burger, and Kathryn~S. McKinley.
+\newblock Compiling for {EDGE} architectures.
+\newblock In {\em Proceedings of the 4th International Symposium on Code
+  Generation and Optimization (CGO-4)}, New York, New York, USA, March 2006.
+
+\end{thebibliography}

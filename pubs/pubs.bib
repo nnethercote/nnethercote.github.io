@@ -1,0 +1,275 @@
+% Nicholas Nethercote's personal BibTex file.
+% In reverse chronological order.
+
+%---------------------------------------------------------------------------%
+@Article{Mar:design-of-zinc2008,
+    author      = {Kim Marriott and Nicholas Nethercote and Reza Rafeh and
+                   Peter J. Stuckey and Maria Garcia de la Banda and Mark
+                   Wallace},
+    title       = {The Design of the {Z}inc Modelling Language},
+    journal     = {Constraints, Special Issue on Abstraction and Automation
+                   in Constraint Modelling},
+    volume      = 13,
+    number      = 3,
+    pages       = {229--267},
+    year        = 2008,
+    summary     = {Describes the design of Zinc, with a focus on its support
+                   for: natural modelling, extensible modelling, software
+                   engineering, and practical solver-independence.  Includes
+                   discussions about why various design decisions were made.}
+}
+
+@InProceedings{Bon:origin-tracking2007,
+    author      = {Michael D. Bond and Nicholas Nethercote and Stephen W.
+                   Kent and Samuel Z. Guyer and Kathryn S. McKinley},
+    title       = {Tracking Bad Apples: Reporting the Origin of Null and
+                   Undefined Value Errors},
+    booktitle   = {Proceedings of the ACM SIGPLAN International Conference
+                   on Object-Oriented Programming, Systems, Languages and
+                   Applications (OOPSLA 2007)},
+    pages       = {405--422},
+    year        = 2007,
+    month       = oct,
+    address     = {Montreal, Canada},
+    summary     = {Discusses how to provide more useful information about
+                   null pointer errors (in Java programs) and undefined
+                   value errors (in C and C++ programs, as detected by
+                   Memcheck).  This is done by using origin tracking, to
+                   track when the troublesome values came into existence.
+                   This can be done efficiently using value piggybacking,
+                   whereby the origin information is encoded in the
+                   troublesome values themselves.  Lots of detail on the
+                   Java implementation, and a good evaluation which shows
+                   it's fast and helpful, and suitable for production use.
+                   There's less on the Memcheck implementation;  it's fast
+                   but not that accurate, as it only works for unmodified
+                   32-bit undefined values, which turn out to be only a
+                   fraction of all the cases.}
+}
+
+@InProceedings{Net:minizinc2007,
+    author      = {Nicholas Nethercote and Peter J. Stuckey and Ralph Becket
+                   and Sebastian Brand and Gregory J. Duck and Guido Tack},
+    title       = {Mini{Z}inc: Towards a Standard {CP} Modelling Language},
+    booktitle   = {Proceedings of the 13th International Conference on
+                   Principles and Practice of Constraint Programming
+                   (CP 2007)},
+    year        = 2007,
+    month       = sep,
+    address     = {Providence, Rhode Island, USA},
+    summary     = {All about MiniZinc, a CP modelling language that is a
+                   cut-down version of Zinc.  Describes the language
+                   (including the non-declarative and solver-specific
+                   annotations), and also FlatZinc, and also the
+                   transformation from MiniZinc to FlatZinc, which happens
+                   to preserve calls to global constraints supported by the
+                   solver.  Has some minimal results.}
+}
+
+@InProceedings{Net:valgrind2007,
+    author      = {Nicholas Nethercote and Julian Seward},
+    title       = {Valgrind: A Framework for Heavyweight Dynamic Binary
+                   Instrumentation},
+    booktitle   = {Proceedings of ACM SIGPLAN 2007 Conference on Programming
+                   Language Design and Implementation (PLDI 2007)},
+    pages       = {89--100},
+    year        = 2007,
+    month       = jun,
+    address     = {San Diego, California, USA},
+    summary     = {Updated paper all about Valgrind.  Focuses on shadow
+                   value tools, because they are what distinguish Valgrind
+                   most from similar frameworks like DynamoRIO and Pin.
+                   Describes shadow value requirements, and how Valgrind
+                   supports them.  First public discussion of
+                   disassemble-and-resynthesise vs. copy-and-annotate for
+                   DBI IR.  Gives more up-to-date description that
+                   supersedes the old papers.  Does a detailed evaluation,
+                   of robustness, ease of tool-writing, instrumentation
+                   capabilities, and performance.}
+}
+
+@InProceedings{Net:shadow-memory2007,
+    author      = {Nicholas Nethercote and Julian Seward},
+    title       = {How to Shadow Every Byte of Memory Used by a Program},
+    booktitle   = {Proceedings of the Third International ACM SIGPLAN/SIGOPS
+                   Conference on Virtual Execution Environments (VEE 2007)},
+    pages       = {65--74},
+    year        = 2007,
+    month       = jun,
+    address     = {San Diego, California, USA},
+    summary     = {Detailed description of Memcheck's shadow memory
+                   implementation.  Describes the simplest version, and then
+                   four optimisations, culminating in the compressed V bits
+                   version.  Has a detailed evaluations of the multiple
+                   versions.}
+}
+
+@InProceedings{Net:workload-characterization2006,
+    author      = {Nicholas Nethercote and Robert Walsh and Jeremy
+                   Fitzhardinge},
+    title       = {Building Workload Characterization Tools with {V}algrind},
+    booktitle   = {Invited tutorial, IEEE International Symposium on
+                   Workload Characterization (IISWC 2006)},
+    year        = 2006,
+    month       = oct,
+    address     = {San Jos\'e, California, USA},
+    summary     = {Tutorial about building tools with Valgrind, particularly
+                   profiling tools.  The four talks cover (a) how Valgrind
+                   works, (b) three example profiling tools (Cachegrind,
+                   Callgrind, Massif), (c) how to build a new tool, using a
+                   simple example, (d) ideas for more advanced tools, and
+                   general tool-building advice.}
+}
+
+@Article{Net:convergent2006,
+    author      = {Nicholas Nethercote and Douglas C. Burger and Kathryn S.
+                   McKinley},
+    title       = {Convergent Compilation Applied to Loop Unrolling},
+    journal     = {Transactions on High-Performance Embedded Architectures and
+                   Compilers, Special Issue: Future Directions in Embedded
+                   Systems Compilation},
+    volume      = 1,
+    pages       = {140--158},
+    month       = sep,
+    year        = 2006,
+    summary     = {Describes convergent compilation, where you optimise
+                   your code, statically evaluate the results later during
+                   compilation, and possibly go back and recompile (making
+                   different optimisation choices) based on what you found.
+                   Gives examples of unrolling on TRIPS.}
+}
+
+@InProceedings{Smi:trips-compiler2006,
+    author      = {Aaron Smith and Jim Burrill and Jon Gibson and Bertrand
+                   Maher and Nicholas Nethercote and Bill Yoder and Doug
+                   Burger and Kathryn S. McKinley},
+    title       = {Compiling for {EDGE} Architectures},
+    booktitle   = {Proceedings of the 4th International Symposium on Code
+                   Generation and Optimization (CGO-4)},
+    year        = 2006,
+    month       = mar,
+    address     = {New York, New York, USA},
+    summary     = {All about compiling for TRIPS.}
+}
+
+@InProceedings{Bus:trips-eval2006,
+    author      = {Kevin Bush and Mark Gebhart and Eric Wei and Natalie
+                   Yudin and Bertrand Maher and Nicholas Nethercote and Doug
+                   Burger and Stephen W. Keckler},
+    title       = {Evaluation and Optimization of Signal Processing Kernels
+                   on the {TRIPS} Architecture},
+    booktitle   = {Proceedings of the 4th Annual Workshop on Optimizations
+                   for DSP and Embedded Systems (ODES-4)},
+    year        = 2006,
+    month       = mar,
+    address     = {New York, New York, USA},
+    summary     = {Evaluation of several signal processing kernels on TRIPS,
+                   and how to best optimise them.}
+}
+
+@InProceedings{Sew:memcheck2005,
+    author      = {Julian Seward and Nicholas Nethercote},
+    title       = {Using {V}algrind to detect undefined value errors with
+                   bit-precision},
+    booktitle   = {Proceedings of the USENIX'05 Annual Technical Conference},
+    year        = 2005,
+    month       = apr,
+    address     = {Anaheim, California, USA},
+    summary     = {Detailed description of Memcheck.}
+}
+
+@PhDThesis{Net:phd2004,
+    author      = {Nicholas Nethercote},
+    title       = {Dynamic Binary Analysis and Instrumentation},
+    school      = {Computer Laboratory, University of Cambridge},
+    address     = {United Kingdom},
+    month       = nov,
+    year        = 2004,
+}
+
+@InProceedings{Net:bounds-checking2004,
+    author      = {Nicholas Nethercote and Jeremy Fitzhardinge},
+    title       = {Bounds-Checking Entire Programs without Recompiling},
+    booktitle   = {Informal Proceedings of the Second Workshop on Semantics,
+                   Program Analysis, and Computing Environments for Memory
+                   Management (SPACE 2004)},
+    year        = 2004,
+    month       = jan,
+    address     = {Venice, Italy},
+    summary     = {Detailed description of Annelid.}
+}
+
+@Article{Net:valgrind2003,
+    author      = {Nicholas Nethercote and Julian Seward},
+    title       = {Valgrind: A Program Supervision Framework},
+    journal     = {Electronic Notes in Theoretical Computer Science},
+    volume      = 89,
+    number      = 2,
+    year        = 2003,
+    summary     = {Overview of Valgrind, concentrating on core and core/skin
+                   interface.  A little bit of Memcheck as an example skin.
+                   Has some performance figures for some SPEC2000 benchmarks.},
+}
+
+@Article{Net:redux2003,
+    author      = {Nicholas Nethercote and Alan Mycroft},
+    title       = {Redux: A Dynamic Dataflow Tracer},
+    journal     = {Electronic Notes in Theoretical Computer Science},
+    volume      = 89,
+    number      = 2,
+    year        = 2003,
+    summary     = {Description of Redux.  Lots of examples, particularly fac(5)
+                   essence comparisons in C, stack machine interpreter, and
+                   Haskell. Also demonstrates program slicing, and discusses
+                   other possible uses of Redux.}
+}
+
+@InProceedings{Net:cache-large-lazy2002,
+    author      = {Nicholas Nethercote and Alan Mycroft},
+    title       = {The Cache Behaviour of Large Lazy Functional Programs on
+                   Stock Hardware},
+    booktitle   = {Proceedings of the ACM SIGPLAN Workshop on Memory System
+                   Performance (MSP 2002)},
+    pages       = {44--55},
+    year        = 2002,
+    month       = jul,
+    address     = {Berlin, Germany},
+    summary     = {Detailed investigation of cache behaviour of Glasgow Haskell
+                   programs on an Athlon.  Finds cache misses and branch
+                   mispredicts cost a lot, and programs have little exploitable
+                   ILP.  Uses simulation (Cachegrind) to identify where cache
+                   misses are occurring.  Uses prefetching to mitigate the cost
+                   of write misses, speeding up programs by up to 22\%},
+}
+
+@MastersThesis{Net:masters2002,
+    author      = {Nicholas Nethercote},
+    title       = {The Analysis Framework of {HAL}},
+    school      = {Department of Computer Science and Software Engineering,
+                   University of Melbourne},
+    month       = apr,
+    year        = 2002,
+    address     = {Australia},
+    summary     = {Describes analysis in HAL: background on languages, theory,
+                   implementation, description of Herbrand analyses
+                   (groundness, sharing, freeness) analyses and optimisations,
+                   determinism analysis and optimisations, and inter-module
+                   analysis and optimisation.}
+}
+
+@InProceedings{Gar:HAL-solvers2001,
+    author      = {Mar\'{\i}a {Garc\'{\i}a de la Banda} and David Jeffery and
+                   Kim Marriott and Nicholas Nethercote and Peter J. Stuckey
+                   and Christian Holzbaur},
+    title       = {Building Constraint Solvers with {HAL}},
+    booktitle   = {Proceedings of the 17th International Conference on Logic
+                   Programming (ICLP'01)},
+    year        = 2001,
+    month       = nov,
+    address     = {Paphos, Cyprus},
+    summary     = {Overview of how to build solvers in HAL, covering type
+                   classes, dynamic scheduling, using external solvers, CHRs,
+                   with performance evaluation.}
+}
+
+

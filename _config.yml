@@ -2,11 +2,11 @@
 title: Nicholas Nethercote
 email: n.nethercote@gmail.com
 description: Be kind and be useful.
-github_username:  nnethercote
-linkedin_username:  nnethercote
+github_username: nnethercote
+linkedin_username: nnethercote
 twitter_username: nnethercote
 
 # Build settings
-theme: jekyll-theme-cayman
+theme: minima
 plugins:
   - jekyll-feed

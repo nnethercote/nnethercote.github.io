@@ -1,0 +1,446 @@
+---
+layout: post
+title: Jury Duty
+permalink: /jury-duty/
+---
+
+**June 14, 2017**
+
+I recently served on the jury for a ten day murder trial at the Supreme
+Court of Victoria in Melbourne, Australia. It was occasionally intimidating and
+unpleasant, frequently tiring, but always educational and engrossing, and
+ultimately a positive experience.
+
+Now that the trial is over I am permitted to discuss publicly available
+details about it. I won't discuss the crime itself here. Instead I will
+describe how the jury selection and trial processes worked, a topic that I find
+equally interesting.
+
+## Notice of Selection
+
+In February I received a Notice of Selection for Jury Service. This letter
+said I had been randomly selected from the Victorian electoral roll for jury
+service at the Melbourne Law Courts some time between March and June.
+
+I completed an online Jury Eligibility Form. There are numerous reasons for
+mandatory exclusion, such as the following.
+<ul>
+  <li>If your English language skills are insufficient.</li>
+  <li>If you are a lawyer, law enforcement officer, judicial officer, member of
+      the defence force, or a member of the Victorian Parliament.</li>
+  <li>If you are on bail or remand, imprisoned, or bankrupt.</li>
+</ul>
+
+There are also numerous reasons for voluntary exclusion, such as the
+following.
+<ul>
+  <li>If you have a medical condition that would make jury service difficult.</li>
+  <li>If you live more than 50km from the court.</li>
+  <li>If you are self-employed or an employee of a small business.</li>
+  <li>If you are the primary caregiver for a child, elderly, or disabled person during business hours.</li>
+  <li>If you are a full-time student.</li>
+  <li>If you are 70 or older.</li>
+</ul>
+
+None of these applied to me. However, I was given the option to state
+periods of time that would be inconvenient. This is useful for things like
+vacations.
+
+## Jury Summons
+
+I received my Jury Summons some time later, with instructions to show up on
+a particular date in May. I had another chance to request deferral or
+exclusion, but again none of the standard reasons applied.
+
+The summons included one vital piece of information: in Victoria each juror
+receives a small daily stipend, and their employer must pay them the difference
+between that stipend and what they would normally be paid. This holds for the
+entire length of the jury service. This distinguishes Victoria from some other
+jurisdictions, and in my opinion it is a fine thing; jurors should not be
+financially punished for performing a civic duty.
+
+The afternoon before my summons date I received a text message to confirm
+that I was still needed.
+
+## Jury Pool Selection
+
+I arrived at the [County Court of
+Victoria](https://en.wikipedia.org/wiki/County_Court_of_Victoria) shortly
+before 9am on my summons date. I passed through an airport-style security
+checkpoint, complete with metal detectors and x-ray machines, and followed the
+"jury service" signs. I checked in with my summons notice and identification,
+and was given a juror number: lucky 88.
+
+The County Court is a modern building, and the jury pool selection area is like
+a small airport terminal. There is a long wide walkway with two large open
+rooms, like airport gates, to one side. The first room has rows of seats facing
+a desk and TV. The second room has tables, comfortable chairs, carrel desks,
+and a pool table. There is even public wifi! I would have brought my laptop if
+I had known.
+
+About half an hour after I arrived we were all called to the first room. There
+must have been 120 people present. The woman in charge spoke for about 15
+minutes, explaining what was going to happen. We then watched a short film that
+filled in some more details. The film was earnest but informative, and included
+re-enactments of the jury selection process within the courtroom. I thought
+this was helpful, particularly for anyone who was feeling nervous.
+
+After the film we went back to waiting. I read a book. Eventually we were
+called back to the first room for the first ballots. We were told the first
+trial was in the County Court and was expected to take about 5 days. The woman
+in charge had a wooden box, about 20cm on each side. She randomly pulled cards
+with juror numbers from it until about 25 people had been chosen. That jury
+panel was then escorted out. The process was repeated for a second trial, also
+in the County Court, and expected to take 5-7 days.
+
+We were then allowed out for lunch, with instructions to return by a given
+time. Some time after our return the third ballot took place, this one for a
+Supreme Court trial expected to last for 10 days. This time there were about 40
+people chosen, and I was one of them.
+
+## Jury Selection in Court
+
+We were escorted from the County Court to the [Supreme
+Court](https://en.wikipedia.org/wiki/Supreme_Court_of_Victoria), a grand old
+stone edifice on the other side of Lonsdale Street. Before leaving the County
+Court we were requested not to speak to anyone while moving between courts,
+because the media and people involved with the trial could be present.
+
+The seriousness of the situation escalated dramatically as we were ushered
+into a courtroom. The courtroom was only moderately large, but had high, ornate
+ceilings and old, wooden furniture. Furthermore, court was in full session!
+Present were the judge, the judge's assistants, the prosecution and defence
+[counsels](https://en.wikipedia.org/wiki/Counsel) and their assistants (two or
+three per side), the accused (sitting in the dock towards the back of the
+courtroom, flanked by two police officers), and numerous spectators. The court
+officers and counsel were all wearing formal black robes.
+
+We jury pool members were seated between the counsel and the dock. The judge
+welcomed us, then gave us a brief description of the charge (murder) and the
+circumstances. We were also each given a list of more than 80 people relevant
+to the trial including potential witnesses; knowing someone on this list was
+grounds for potential exclusion. After some discussion, a handful more people
+were granted exclusions.
+
+This left about 35 potential jurors. I was hoping not to be picked, and the
+odds were in my favour. The Judge's Associate starting drawing cards out of a
+wooden box identical to the one that had been used earlier in the other
+building... and my name was on the first card drawn. Oh dear.
+
+The accused had the right to reject up to six jurors without explanation,
+but the only information they had about the juror was the juror's name,
+occupation, and physical appearance. I had to walk slowly past the dock so the
+accused could get a good look at me. They didn't call out "challenge" by the
+time I sat down in the jury box, by which point I was officially a juror.
+
+More names were randomly chosen, and the process repeated. The accused
+rejected several jurors, who sat back down. Soon we had 13 in the jury box. A
+full jury is 12 people, but we had one extra in case of illness because it was
+a moderately long trial. (In longer trials they sometimes choose 14.) At the
+end of the trial, just prior to deliberations, one juror was randomly selected
+for removal.
+
+We then had to pledge to do our best and not reveal privileged information
+to outside parties. This was done in two steps: first those of a religious bent
+took an oath ("I swear by almighty God..."), then the rest made an affirmation
+("I solemnly and sincerely declare and affirm...").
+
+## Trial Types
+
+The two main types of trials are criminal trials and civil trials.
+
+Criminal trials are between the state ("The Crown" in Victoria, because
+Australia is a constitutional monarchy) and the accused. This basically means
+crimes where the police are involved, such as violent crimes. This trial was a
+murder trial and hence a criminal trial. The standard of proof in a criminal
+trial is "beyond reasonable doubt", which is the highest standard of proof in
+the Victorian legal system.
+
+Civil trials are between two private parties. They include things like
+medical malpractice, defamation, and negligence. The standard of proof in a
+civil trial is "on the balance of probabilities", i.e. more likely than not,
+which is a lower standard of proof.
+
+This distinction was explained to us during the opening remarks from the
+judge, the prosecution, and the defence... especially the defence. Once those
+remarks were completed, it was late in the afternoon, and we were sent home.
+
+## Jury Accommodations
+
+On the second day we had to arrive by 10am. We entered via a side entrance,
+replete with more security checks, and met in the jury lounge, a room where
+multiple juries congregated in the morning and after lunch.
+
+In that room we were met by the
+[Tipstaff](https://en.wikipedia.org/wiki/Tipstaff) He is an employee of the
+judge who served throughout the trial as the liaison to the jury. He greeted
+and farewelled us each day, escorted us around the building and in and out of
+court, and often explained what was going on.
+
+The Tipstaff took us to the jury room. It was a comfortable room with a
+large conference table and chairs, whiteboards and a TV (for replaying video
+evidence), a kitchenette with tea and coffee facilities, and toilets. But
+definitely no wi-fi!
+
+After the Tipstaff left us alone in the jury room we all introduced
+ourselves and chose a foreperson, which ended up being me. The foreperson's
+main job is to announce the verdict at the end of the trial. For this reason,
+they are the one jury member who cannot be randomly selected for removal for
+trials with extra jurors. The foreperson can also serve as a leader for
+discussions in the jury room; throughout the trial I did my best to do this
+with a light touch. My most overt action was to get to everybody to sit in a
+different seat around the conference table each day so that we weren't always
+next to the same people.
+
+Every time the Tipstaff entered the jury room he first knocked twice,
+loudly, and then paused for a few seconds before entering. He did this so he
+wouldn't hear any of our discussions about the trial. Because we never knew
+exactly when he was coming, these knocks were often startling, particularly
+when the room was quiet.
+
+Each time we entered court the Tipstaff escorted us across a corridor and
+into an ante-room. He then repeated his double knock on the door to the
+courtroom and led us in.  As the foreperson I was always the last one to leave
+the jury room, and I had to make sure nobody was left behind, which mostly
+involved checking the toilets weren't occupied. I also had to sit in the front
+row of the jury box in the position closest to the judge; the other jurors
+could sit in any arrangement.
+
+## Evidence
+
+Most of the trial consisted of the presentation of evidence, i.e. the facts
+of the case. Evidence came in a number of forms.
+- Testimony from lay witnesses, i.e. people who were involved directly or
+  indirectly with the crime.
+- Testimony from expert witness, e.g. police officers and pathologists.
+- Photographs. We saw hundreds of photographs relating to the crime, including
+  photographs of places, artifacts, and an autopsy.
+- Transcripts of police interviews.
+- Written statements.
+- Screenshots of text messages and Facebook posts.
+
+Witnesses appeared both in person and via video link.
+
+The judge had explained that the jury serves as the judge of the facts, while
+the judge serves as the judge of the law. As the judge of the facts, the
+members of the jury are free to reach their own conclusions about all of the
+presented evidence. For example, testimony from witnesses can be evaluated for
+both honesty and reliability.
+
+All the documentary evidence was duplicated 14 times, so that the judge and
+every juror received a copy. (I see now why law firms use so much stationery.)
+The Tipstaff gave each juror a bag in which to hold the various binders and
+photo books that we received.
+
+There were some obvious and surprising gaps in the evidence. For example, we
+did not hear testimony from some people who were directly involved in the
+crime. I imagine the decisions regarding these omissions is a matter of much
+discussion between the counsel and the judge, but we as the jury were not privy
+to any of it because it could bias our views.
+
+The jury is also allowed to ask questions of the judge. These are submitted in
+writing to the judge and can be about any topic.
+
+## Schedule
+
+Court time each day was 10.30am to 1pm, then a break for lunch, then 2.15pm
+to 4.15pm. Combine that with two or three short breaks and the maximum court
+time on any day was about 4 hours. Also, we rarely started right on 10.30am or
+2.15pm, and a couple of times the judge halted proceedings well before 4.15pm.
+We even had one whole day off while the judge and lawyers discussed matters
+that we weren't privy to.
+
+It might sound easy, but it wasn't. Court time as a juror is *exhausting*. You
+are a non-expert in strange surroundings who is given a huge responsibility.
+You are presented with a great deal of detailed information about unfamiliar
+subject matter and you don't want to lose attention for a second. It requires
+enormous concentration, and we were all reliably tired by the end of each day.
+It did get a little easier after the first few days once we were familiar with
+the setting and the details of the case.
+
+The jury is always the last to enter the court and the first to leave. This
+lends a slightly unreal feeling to proceedings. Every time we entered court,
+everybody else was already there, in their usual positions, as if they existed
+purely for our pleasure. As soon as we took our seats the judge would welcome
+us back, and the action would immediately start again. Combine that a room of
+our own, plus our personal attendant (the Tipstaff), and it felt a bit like we
+were travelling in first class. But not quite, because first class customers
+aren't captive; they are allowed to leave the first class lounge.
+
+## Spectators
+
+The court had three spectator areas.
+
+Downstairs at the back was seemingly reserved for people with a connection
+to the trial. Most of the people who watched from this section did so for the
+entire length of the trial.
+
+Upstairs at the back and sides there was a public gallery. People viewing from
+this section tended to come in and watch for short periods. There were a number
+of high school groups that came in briefly.
+
+A side box on floor level appeared to be reserved for the press, though I'm not
+certain about this. Only a handful of people used this section.
+
+## Misconceptions from Popular Culture
+
+It was interesting to see how real life court differed from court scenes in TV
+shows and movies, particularly American ones. In the jury pool selection area
+there were a number of information panels on a wall explaining various aspects
+of jury service, and one panel specifically mentioned a number of common
+misconceptions.
+- In the 1960s some jurors suffered from "Perry Mason Syndrome": an expectation
+  of high drama, such as aggressive cross-examinations, last-minute
+  confessions, and gasps from spectators. They were invariably
+  disappointed.
+- A modern manifestation is "The CSI Effect", where jurors expect exquisite
+  forensic evidence to solve every case.
+- The old film "Twelve Angry Men" features a lone juror who disagrees with the
+  other jurors in a murder trial. It was mentioned as being potentially
+  misleading because for some cases in Victoria an 11-1 result is sufficient
+  for a verdict, though not for a murder trial.
+- I mentioned earlier that jurors are not questioned. This differs from
+  American courts where questioning of jurors ([*voir
+  dire*](https://en.wikipedia.org/wiki/Voir_dire))
+  is often a critical part of a trial.
+
+Another mild surprise was the subdued behaviour of the counsel and judge in
+court. There were no shouts of "objection", "sustained", or "overruled"; nor
+was there any use of a [gavel](https://en.wikipedia.org/wiki/Gavel). There were
+a handful of objections, but the objecting counsel did this by simply standing
+and gently interrupting, whereupon the judge would calmly agree or disagree and
+issue instructions. The counsels also referred to each other as "my friend" or
+"my learned friend", which is apparently the standard form of address.
+
+At one point one counsel, after receiving an answer from a witness that he
+clearly didn't expect or like, pointedly said "I suggest you are confused",
+paused expectantly, and then went on to hector the witness about the details of
+the answer. In a TV show the other side would have surely objected— "badgering
+the witness", or something like that—but nobody batted an eye.
+
+Although the counsel and judges wore formal black robes, I was surprised
+that they didn't wear wigs. Apparently they stopped using wigs in the Supreme
+Court just a year or two ago. (They are still used in the County Court,
+however, and I saw plenty of lawyers wearing them outside on the street.)
+
+## Closing Statements
+
+The closing statements were *much* longer than the opening statements. The
+prosecution's was about two hours, and the defence's even longer.
+
+The prosecution's closing statement tied together most of the pieces of
+evidence into a cohesive argument. This was useful, because prior to that point
+the relevance of some pieces of evidence had been unclear.
+
+The defence's closing statement was largely an exercise in casting doubt and
+poking holes in the prosecution's case. Whic is fair enough; that's basically
+the defence's entire job. The defence counsel also reminded us, literally
+dozens of times, that the standard of proof was "beyond reasonable doubt".
+
+Both sides' closing statements included a great deal of repetition. This is
+understandable, and both sides took every opportunity to reinforce their
+arguments.
+
+Finally, the judge also made her "charge", a kind of closing statement. Part of
+this was very useful, providing some legal definitions and instructions about
+how to consider various pieces of evidence. For example, we were told that a
+lack of testimony from certain people involved in the crime cannot be
+considered meaningful. The judge also summarised both the prosecution and
+defence's cases in considerable detail. This part was annoying because it
+simply repeated what we'd just heard directly from the prosecution and the
+defence.
+
+## Deliberations
+
+After the judge finished her charge one juror was randomly selected to
+leave. That juror was immediately ushered out of court by the Tipstaff without
+a chance to even wave goodbye to the other jurors. After ten days together,
+this was unfortunate.
+
+The remaining twelve jurors then took another oath or affirmation relating to
+confidentiality—all discussion during deliberations must remain secret
+forevermore—and we returned to the jury room to begin deliberations. Unanimous
+agreement was required for a verdict in this case.
+
+At this point we were under tighter control. The Tipstaff took our phones, and
+we had breaks in the interior courtyard of the building under his supervision.
+Sandwiches were provided for lunch. We would have been allowed to go home had
+deliberations taken long enough—overnight sequesters are only required for
+extremely high-profile cases—but this wasn't required in the end.
+
+## Life as a Counsel
+
+During the trial I thought frequently about life as a counsel. You spend months
+or years on each case, preparing for the trial, at which you give a kind of
+competitive performance.
+
+But it's an unusual performance, because you're primarily performing for a
+tiny audience (twelve people) of non-experts. So you're not only a performer,
+you're also a teacher of sorts. You have to educate the audience, correcting
+any prior misconceptions they might have, at the same time you are making your
+argument.
+
+Finally, this audience evaluates your performance, and your opponent's. A
+winner is announced, but there is zero additional feedback. You don't know
+which parts of your performance were effective of ineffective, nor how the
+audience came to their conclusion. It's the least helpful performance review
+imaginable. What an odd and frustrating experience it must be.
+
+## Announcing the Verdict
+
+Once we had a verdict, we informed the Tipstaff and he arranged for
+everybody to return to court. This took about half an hour, partly because the
+court we had been using was being used for a mock trial for some kind of
+publicity purposes! So we ended up in a different courtroom.
+
+This courtroom was similar in size and decoration to the other one, but the
+jury room was much less pleasant: cramped, stuffy, and it opened directly onto
+the courtroom. From the seat I had chosen I could see the accused before the
+door to the courtroom was fully open! I'm glad we weren't in that room for two
+weeks.
+
+After entering court the Judge's Associate asked me the following three
+questions (paraphrasing slightly).
+
+1. Have you reached a verdict?
+1. Do you find the defendant guilty or not guilty?
+1. Is this the decision of the entire jury?
+
+I had been given a script by the Tipstaff beforehand so I knew exactly what the
+questions would be and how to answer. I answered these using a microphone that
+was attached to the jury box.
+
+The judge then thanked us for our service, and, bizarrely enough, told us that
+we would be given a survey about our experience as jurors, and spent a minute
+or two encouraging us to complete it because our feedback would be very
+helpful. This felt entirely out of place—we had just announced the verdict for
+a murder trial!—and it could easily have been handled in the out-of-court
+debriefing that we received immediately afterward.
+
+In fact, we didn't get the survey in the debriefing because no copies were
+ready! But we were given an information sheet and told that we would all be
+excused from further jury duty for at least three years, although we had the
+option to waive that exclusion. Finally, we were dismissed, let out of the
+building, and the whole experience was over.
+
+## Jury Quality
+
+One of the most positive aspects of this experience was the jury itself. The
+jurors were diverse in terms of gender, age, occupation, and where they lived.
+It felt like a genuinely random cross-section of the populace.
+
+I was also impressed by every juror's attitude and behaviour. I doubt anyone
+particularly wanted to be there, but everybody participated seriously,
+actively, and to the best of their ability. I hope every jury is as good as
+ours.
+
+## Conclusion
+
+My jury duty was a positive experience. It wasn't easy, but it was engrossing
+and educational. We had a good jury that performed an important civic duty to
+the best of our abilities. The lawyers, judge, and other staff were
+professional and competent, and did a good job of teaching us what we needed to
+know. The selection process was reasonable. The court experience was a little
+on the slow side, but not unreasonably so. The handling of juror surveys was
+poor, but that's a minor matter. Overall it left me with a good impression of
+the Victorian justice system.

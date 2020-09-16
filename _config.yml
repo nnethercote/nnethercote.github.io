@@ -7,6 +7,6 @@ linkedin_username:  nnethercote
 twitter_username: nnethercote
 
 # Build settings
-theme: minima
+theme: jekyll-theme-cayman
 plugins:
   - jekyll-feed

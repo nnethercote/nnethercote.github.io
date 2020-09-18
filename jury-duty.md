@@ -1,10 +1,9 @@
 ---
-layout: post
 title: Jury Duty
-permalink: /jury-duty/
+layout: page
 ---
 
-**June 14, 2017**
+**Written June 14, 2017**
 
 I recently served on the jury for a ten day murder trial at the Supreme
 Court of Victoria in Melbourne, Australia. It was occasionally intimidating and

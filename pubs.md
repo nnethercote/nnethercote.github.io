@@ -19,7 +19,8 @@ Nicholas Nethercote and Julian Seward.
 [**Valgrind: A Framework for Heavyweight Dynamic Binary
 Instrumentation.**](pubs/valgrind2007.pdf)
 PLDI 2007.
-**2017 Winner of the Most Influential PLDI Paper Award.**
+**[2017 Winner of the Most Influential PLDI Paper
+Award](https://www.sigplan.org/Awards/PLDI/).**
 
 Nicholas Nethercote and Julian Seward.
 [**How to Shadow Every Byte of Memory Used by a

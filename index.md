@@ -6,13 +6,16 @@ layout: home
 
 # About me
 
-I am a software engineer from Melbourne, Australia.
+I am a software engineer from Melbourne, Australia. I have worked on many kinds
+of systems software, including web browsers, compilers, profilers, checkers,
+and benchmarking suites.
 
-I work for [Mozilla](https://mozilla.com/). I have a
+I work for [Apple](https://apple.com). Previously, I worked for
+[Mozilla](https://mozilla.com/), where I had a
 [blog](https://blog.mozilla.com/nnethercote). Many of the links below are to
 posts from that blog.
 
-I like making code faster and more memory-efficient. Examples:
+I have experience making code faster and more memory-efficient. Examples:
 [the Rust compiler](http://blog.mozilla.org/nnethercote/2020/09/08/how-to-speed-up-the-rust-compiler-one-last-time/),
 [pdf.js](https://mozilla.github.io/pdf.js/)
 ([1](https://blog.mozilla.org/nnethercote/2014/02/07/a-slimmer-and-faster-pdf-js/),
@@ -20,7 +23,7 @@ I like making code faster and more memory-efficient. Examples:
 [JavaScript parsing](https://blog.mozilla.org/nnethercote/2011/07/01/faster-javascript-parsing/),
 [Clownshoes allocations](https://blog.mozilla.org/nnethercote/2011/08/05/clownshoes-available-in-sizes-2101-and-up/).
 
-I like writing profilers. Examples:
+I have written a number of profilers. Examples:
 [DHAT](http://blog.mozilla.org/nnethercote/2019/04/17/a-better-dhat/),
 [ad hoc profiling](http://blog.mozilla.org/nnethercote/2018/07/24/ad-hoc-profiling/),
 [Firefox's about:memory](https://developer.mozilla.org/en-US/docs/Mozilla/Performance/about:memory)
@@ -35,8 +38,8 @@ I like writing profilers. Examples:
 ([one](https://blog.mozilla.org/nnethercote/2012/12/21/dmd/),
 [two](https://blog.mozilla.org/nnethercote/2014/12/11/cumulative-heap-profiling-in-firefox-with-dmd/)).
 
-I like overhauling ugly code to make it simpler, more reliable, maintainable,
-and performant. Examples:
+I have often overhauled ugly code to make it simpler, more reliable,
+maintainable, and performant. Examples:
 [Firefox static atoms](https://blog.mozilla.org/nnethercote/2018/10/12/slimmer-and-simpler-static-atoms/),
 [Firefox prefs parser](https://blog.mozilla.org/nnethercote/2018/03/09/a-new-preferences-parser-for-firefox/),
 [Firefox startup](https://blog.mozilla.org/nnethercote/2018/02/22/nicer-commands-for-content-processes/),

@@ -44,6 +44,10 @@ roster](https://github.com/rust-lang/rustc-perf/blob/master/triage/README.md)
 who watch for regressions: ecstatic-morse, Mark-Simulacrum, rylev, and
 pnkfelix.
 
+**Update:** In case it wasn't clear, this includes the LLVM team. A decent
+chunk of the improvements are due to changes within LLVM, which the Rust
+compiler uses for its backend.
+
 If you want to see how performance has changed over a longer period, check out
 [2019-11-07 to
 2021-11-11](https://perf.rust-lang.org/compare.html?start=2018-11-05&end=2021-11-11&stat=wall-time).

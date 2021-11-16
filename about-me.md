@@ -53,7 +53,8 @@ I have run some projects and teams. Examples:
 [Mozilla's Low-Level Tools team](https://wiki.mozilla.org/Low_Level_Tools).
 
 I like explaining things. Examples:
-[Power profiling docs](https://developer.mozilla.org/en-US/docs/Mozilla/Performance),
+[The Rust Performance Book](https://nnethercote.github.io/perf-book/),
+[Power profiling docs](https://firefox-source-docs.mozilla.org/performance/#power-profiling),
 [Browser memory measurements](https://blog.mozilla.org/nnethercote/2012/07/09/how-to-compare-the-memory-efficiency-of-web-browsers/),
 [Memory consumption](https://blog.mozilla.org/nnethercote/2012/02/08/the-benefits-of-reducing-memory-consumption-2/),
 [Firefox memory improvements](https://blog.mozilla.org/nnethercote/2012/01/17/notes-on-reducing-firefoxs-memory-consumption/),

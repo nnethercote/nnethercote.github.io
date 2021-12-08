@@ -246,10 +246,11 @@ Here are some things I've tried.
 - Change the order from rotate/xor/multiply to xor/multiple/rotate: slightly
 slower.
 
-The only thing that was a clear win was to change the `#[inline]` attributes to
+~~The only thing that was a clear win was to change the `#[inline]` attributes to
 `#[inline(always)]`, which slightly sped up a couple of benchmarks. Although
 the methods are usually inlined, there must have been one or two
-performance-sensitive places where they weren't.
+performance-sensitive places where they weren't.~~ **Update:** this turned out
+to be a measurement error, and `#[inline(always)]` makes no difference.
 
 After all this, my appreciation for `FxHasher` has grown. It's like a machete:
 simple to the point of crudeness, yet unbeatable for certain use cases.

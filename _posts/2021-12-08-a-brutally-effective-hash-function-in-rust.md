@@ -191,7 +191,7 @@ It is brutally simple. Initialisation sets a single variable to zero. Hashing a
 value is just a rotate, an xor, and a multiply. Finalisation is a no-op.
 
 (Are you wondering where the constant 0x517cc1b727220a95 comes from?
-0xffff_ffff_ffff_ffff / 0x517cc1b727220a95 = 1/π.)
+0xffff_ffff_ffff_ffff / 0x517c_c1b7_2722_0a95 = π.)
 
 In terms of hashing quality, it is mediocre. If you run it through a hash
 quality tester it will fail a number of the tests. For example, if you hash any

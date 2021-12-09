@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["dhat"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.57.0/core/alloc/global/trait.GlobalAlloc.html\" title=\"trait core::alloc::global::GlobalAlloc\">GlobalAlloc</a> for <a class=\"struct\" href=\"dhat/struct.Alloc.html\" title=\"struct dhat::Alloc\">Alloc</a>","synthetic":false,"types":["dhat::Alloc"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

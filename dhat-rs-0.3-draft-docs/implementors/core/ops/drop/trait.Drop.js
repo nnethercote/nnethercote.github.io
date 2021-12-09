@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["dhat"] = [{"text":"impl&lt;'m&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/1.57.0/core/ops/drop/trait.Drop.html\" title=\"trait core::ops::drop::Drop\">Drop</a> for <a class=\"struct\" href=\"dhat/struct.Profiler.html\" title=\"struct dhat::Profiler\">Profiler</a>&lt;'m&gt;","synthetic":false,"types":["dhat::Profiler"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

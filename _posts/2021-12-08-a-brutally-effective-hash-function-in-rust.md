@@ -3,6 +3,9 @@ layout: post
 title: A brutally effective hash function in Rust
 ---
 
+**Update (Dec 10, 2021):** I have added some extra information worth reading at
+the bottom of this post.
+
 The Rust compiler uses hash tables heavily, and the choice of hash function
 used for these hash tables makes a big difference to the compiler's speed.
 
@@ -264,3 +267,70 @@ this topic. If you know of a change to `FxHasher` or an alternative algorithm
 that might be faster or better, I'd love to hear about it via email, or
 Twitter, or wherever else. I just want to make the compiler faster. Thanks!
 
+# **Update**
+
+There was some good discussion about this post [on
+Reddit](https://www.reddit.com/r/rust/comments/rbe3vn/a_brutally_effective_hash_function_in_rust/).
+Reddit user CAD1997 [pointed
+out](https://www.reddit.com/r/rust/comments/rbe3vn/a_brutally_effective_hash_function_in_rust/hnsgk1x/)
+that `FxHasher`'s handling of the high bits of inputs is poor, because the
+multiply effectively throws a lot of them away. This means it performs badly
+when hashing a 64-bit integer with low entropy in the low bits.
+
+This was demonstrated when llogiq and I [tried
+out](https://github.com/rust-lang/rust/pull/91660) a micro-optimization [idea
+from
+glandium](https://www.reddit.com/r/rust/comments/rbe3vn/a_brutally_effective_hash_function_in_rust/hnorwqh/)
+for combining a struct with two 32-bit fields into a single 64-bit value to be
+hashed, rather than hashing them separately. The struct in question is this
+one:
+```
+pub struct DefId {
+    pub krate: CrateNum,
+    pub index: DefIndex,
+}
+```
+`krate` and `index` are both 32-bit integers. `krate` is a low-entropy value,
+typically taking on a small number of distinct values. `index` is a
+high-entropy value, typically taking on a large number of distinct values.
+
+If they are combined like this, with the high-entropy field in the low bits:
+```
+((self.krate as u64) << 32) | (self.index as u64)
+```
+it's a tiny win compared to hashing them separately.
+
+If they are combined like this, with the high-entropy field in the high bits:
+```
+((self.index as u64) << 32) | (self.krate as u64)
+```
+it's a huge slowdown due to a massive increase in hash table collisions.
+
+So it's good to be aware of this weakness when using `FxHasher`. But why does
+`FxHasher` still do well in the Rust compiler? First, the compiler is (almost?)
+always built as a 64-bit binary, so `FxHasher` is working with 64-bit inputs
+and hash values. Second, the values hashed are in three groups.
+- Most common are integers. These are (almost?) all 32-bit integers or smaller,
+  in which the upper bits are all zero.
+- Next most common are pointers. These have very low entropy in the upper bits
+  because most memory allocations occur in a small number of distinct sections
+  of the address space, such as the heap and the stack.
+- Least common are strings. These are hashed by `FxHasher` in 64-bit chunks,
+  and so the hash quality won't be good, but it seems they are rare enough that
+  it doesn't really hurt performance.
+
+Nonetheless, I am considering using an idea from the
+[`ahash`](https://crates.io/crates/ahash) crate. For its
+[fallback](https://github.com/tkaitchuck/aHash/blob/master/src/fallback_hash.rs)
+variants it can use a clever [folded multiply
+operation](https://github.com/tkaitchuck/aHash/blob/e77cab8c1e15bfc9f54dfd28bd8820c2a7bb27c4/src/operations.rs#L11-L14)
+that mixes bits well without throwing them away, because the overflow bits from
+the multiply get XORed back into the result. And it turns out you can do this
+surprisingly cheaply on common platforms. `ahash`'s fallback variants do some
+additional initialisation and finalisation work that probably wouldn't benefit
+the compiler, so I wouldn't use `ahash` directly. But changing
+`FxHasher::add_to_hash()` to use the folded multiply will likely give a has
+function that is as fast while avoiding the potential performance cliffs.
+
+I wrote the original post in the hope of learning about improvements, so I
+consider this a good outcome!

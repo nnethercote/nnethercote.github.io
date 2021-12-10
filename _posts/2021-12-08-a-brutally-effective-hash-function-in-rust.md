@@ -329,7 +329,7 @@ the multiply get XORed back into the result. And it turns out you can do this
 surprisingly cheaply on common platforms. `ahash`'s fallback variants do some
 additional initialisation and finalisation work that probably wouldn't benefit
 the compiler, so I wouldn't use `ahash` directly. But changing
-`FxHasher::add_to_hash()` to use the folded multiply will likely give a has
+`FxHasher::add_to_hash()` to use the folded multiply will likely give a hash
 function that is as fast while avoiding the potential performance cliffs.
 
 I wrote the original post in the hope of learning about improvements, so I

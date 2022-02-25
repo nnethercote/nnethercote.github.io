@@ -6,6 +6,8 @@ title: A brutally effective hash function in Rust
 **Update (Dec 10, 2021):** I have added some extra information worth reading at
 the bottom of this post.
 
+**Update (Feb 25, 2022):** And some more.
+
 The Rust compiler uses hash tables heavily, and the choice of hash function
 used for these hash tables makes a big difference to the compiler's speed.
 
@@ -252,7 +254,7 @@ slower.
 ~~The only thing that was a clear win was to change the `#[inline]` attributes to
 `#[inline(always)]`, which slightly sped up a couple of benchmarks. Although
 the methods are usually inlined, there must have been one or two
-performance-sensitive places where they weren't.~~ **Update:** this turned out
+performance-sensitive places where they weren't.~~ **Update (Dec 8, 2021):** this turned out
 to be a measurement error, and `#[inline(always)]` makes no difference.
 
 After all this, my appreciation for `FxHasher` has grown. It's like a machete:
@@ -267,7 +269,7 @@ this topic. If you know of a change to `FxHasher` or an alternative algorithm
 that might be faster or better, I'd love to hear about it via email, or
 Twitter, or wherever else. I just want to make the compiler faster. Thanks!
 
-# **Update**
+# **Update (Dec 10, 2021)**
 
 There was some good discussion about this post [on
 Reddit](https://www.reddit.com/r/rust/comments/rbe3vn/a_brutally_effective_hash_function_in_rust/).
@@ -334,3 +336,22 @@ function that is as fast while avoiding the potential performance cliffs.
 
 I wrote the original post in the hope of learning about improvements, so I
 consider this a good outcome!
+
+# **Update (Feb 25, 2022)**
+
+I tried the folded multiply operation a while ago, but it caused a slight
+increase in instruction counts. I realized that the rotate/xor/multiply
+sequence used by `FxHasher` is even better than I originally thought. When
+hashing a single value (the most common case) the rotate is on the initial
+value of zero, which is a no-op that the compiler can optimize away. And then
+value being hashed is xor'd onto a zero, which just gives the original value.
+So this case ends up optimizing down to a single multiply!
+
+In comparison, the folded multiply requires at least a multiply and an xor.
+It's possible that the folded multiply gives better protection against
+pathological behaviour, but that possible benefit wasn't enough to take it up
+within rustc, at least for now.
+
+However, this is still a chance of [a different
+improvement](https://github.com/rust-lang/rust/pull/93651).
+

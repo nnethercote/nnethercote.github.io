@@ -31,7 +31,7 @@ of benchmarks, though the results were a bit noisy.
 wins in lots of benchmarks.
 
 [hashbrown #305](https://github.com/rust-lang/hashbrown/pull/305): rustc uses
-hash tables heaviy, and I discovered that approximately one third of all
+hash tables heavily, and I discovered that approximately one third of all
 non-modifying hash table lookups are on an empty table! `hashbrown` would
 nonetheless hash the inputs and perform a normal lookup in the case. This PR
 changed it to fail immediately if the table is empty, for one win of 11% and

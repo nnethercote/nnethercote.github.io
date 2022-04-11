@@ -58,10 +58,10 @@ The checking tools are potentially useful in the following cases.
 - When you haven't written any unsafe code, but you don't entirely trust some
   third-party crates that you are using. (Or even the standard library!)
 
-- **[Update (Jan 5)]** Detecting memory leaks. These aren't common in Rust, but
-  are possible (e.g. due to cycles in reference counted types) even in safe
-  code. They're not considered unsafe because they can't result in dangerous
-  crashes or security vulnerabilities.
+- **[Update (Jan 5, 2022)]** Detecting memory leaks. These aren't common in
+  Rust, but are possible (e.g. due to cycles in reference counted types) even
+  in safe code. They're not considered unsafe because they can't result in
+  dangerous crashes or security vulnerabilities.
 
 Memcheck works well in these cases. Helgrind and DRD may also be useful, though
 I don't have any personal experience using them this way.
@@ -70,6 +70,9 @@ I don't have any personal experience using them this way.
 
 There are currently some minor issues with using Valgrind on Rust code that
 could affect a small fraction of use cases.
+
+**[Update (Apr 12, 2022)] Valgrind 3.19 is now available. It fixes all of
+these minor issues.**
 
 #### Missing inline stack frames
 

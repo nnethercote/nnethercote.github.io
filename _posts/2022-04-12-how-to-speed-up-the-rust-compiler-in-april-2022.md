@@ -386,7 +386,7 @@ could pipeline its compilation. The following image, generated with `cargo
 used to build serially. The bottom half shows how it now parallelizes nicely,
 shaving about 10 seconds off the build time for this example.
 
-![Improved pipelining for hyper](/images/2022/04/13/hyper-pipelining.jpg)
+![Improved pipelining for hyper](/images/2022/04/12/hyper-pipelining.jpg)
 
 Finally, people love reading about failed optimization attempts, so here is
 one. The compiler currently uses LEB128 compression when writing integers to

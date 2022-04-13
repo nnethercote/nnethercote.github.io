@@ -339,7 +339,9 @@ latest versions. This is a good thing, because many of the versions were four
 or five years old. (To give you one example, we upgraded the `syn` crate from
 v0.11.11 to v1.0.89!) This task was
 [shared](https://hackmd.io/d9uE7qgtTWKDLivy0uoVQw) by me, @Kobzol, @lqd,
-and [@rylev](https://github.com/rylev).
+and [@rylev](https://github.com/rylev). And thanks to
+[@jdm](https://github.com/jdm) for making a new `html5ever` release to help
+with this.
 
 For those who care about data continuity, never fear: the handful of "stable"
 benchmarks used for the perf

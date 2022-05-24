@@ -81,7 +81,7 @@ Here are the PRs.
 - [#95794](https://github.com/rust-lang/rust/pull/95794) (3 commits, filed
   April 8): Basic refactorings.
 - [#95928](https://github.com/rust-lang/rust/pull/95928) (5 commits, filed
-  April 11, not yet merged): Avoided some cloning, giving up to 3% wins.
+  April 11): Avoided some cloning, giving up to 3% wins.
 
 Phew! Many thanks to [@petrochenkov](https://github.com/petrochenkov) for
 reviewing all these PRs.

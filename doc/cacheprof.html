@@ -1,0 +1,1043 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.07 [en] (X11; I; Linux 2.0.36 i586) [Netscape]">
+</HEAD>
+<BODY>
+&nbsp;
+<CENTER>
+<H1>
+Cacheprof, version 0.1 (snapshot 991209)</H1></CENTER>
+
+<CENTER>jseward@acm.org
+<BR>http://www.cacheprof.org
+<BR>Copyright (c) 1999 Julian Seward
+<BR>An open-source tool for investigating cache effects in programs
+<BR>Cacheprof is licensed under the GNU General Public License, version
+2</CENTER>
+
+<H4>
+
+<HR WIDTH="100%"></H4>
+
+<H4>
+Contents of this manual</H4>
+
+<H4>
+0&nbsp; How to avoid reading this manual</H4>
+
+<H4>
+1&nbsp; Introduction</H4>
+1.1&nbsp; What it does
+<BR>1.2&nbsp; How you use it
+<BR>1.3&nbsp; Stability and performance
+<BR>1.4&nbsp; Are the results meaningful?
+<BR>1.5&nbsp; Other limitations of the implementation
+<BR>1.6&nbsp; The license
+<H4>
+2&nbsp; How to use it</H4>
+2.1&nbsp; Basics
+<BR>2.2&nbsp; Options for cacheprof
+<BR>2.3&nbsp; The annotated assembly (.sA, -SA) stage
+<BR>2.4&nbsp; Manufacturing new caches with cachegen
+<H4>
+3&nbsp; How it works</H4>
+
+<H4>
+4&nbsp; How to install it</H4>
+4.1&nbsp; Installing pre-built binaries
+<BR>4.2&nbsp; Building from source
+<BR>4.3&nbsp; Haskell resources
+<BR>4.4&nbsp; How to contribute
+<H4>
+5&nbsp; If you have problems</H4>
+
+<H4>
+6&nbsp; An example</H4>
+
+<H4>
+7&nbsp; How cacheprof came to be</H4>
+
+<P><BR>
+<HR WIDTH="100%">
+<H1>
+0&nbsp; How to avoid reading this manual</H1>
+Since it is not in human nature to RTFM, here are some short-circuit hints.
+<P>If you haven't got a clue what this is all about, read Sections 1.1,
+1.2 and then 6.
+<P>If you want to install a binary build and then use it, read Section
+4.1 and then Section 2.&nbsp; You'd be well advised to look briefly at
+Section 6 since that's a quick way to get some idea what you'll get for
+your efforts.
+<P>If you want to compile it from source, read Sections 4.2 and 4.3.&nbsp;
+Cacheprof is written almost entirely in Haskell, and those sections tell
+you how to get hold of a compiler for it.
+<P>If you don't want to rebuild it all from source, but instead want to
+reconfigure a binary distribution to simulate a different cache, you don't
+need a Haskell compiler, just gcc.&nbsp; Read Section 2.4.
+<P>Otherwise, you'll have to bite the bullet and make your own decisions
+what to read.&nbsp; It's a hard life :-)
+<BR>&nbsp;
+<H1>
+1&nbsp; Introduction</H1>
+
+<H3>
+1.1&nbsp; What it does</H3>
+Cacheprof is a tool to help you find out where and why your program causes
+cache misses.&nbsp; Cacheprof will annotate source code with profiling
+results on a line-by-line basis, so you can find out precisely which lines
+of code are causing misses.&nbsp; This is tremendously useful in understanding
+the cache friendliness or otherwise of programs and algorithms.&nbsp; Each
+source line can be annotated with reference and miss counts.&nbsp; Counts
+are also presented on a per-function basis.&nbsp; For the program as a
+whole, cacheprof records the number of reads, writes, read misses and write
+misses, further categorised by whether they are 1, 2, 4 or 8 byte references.&nbsp;
+Finally, cacheprof also counts the number of instructions executed.&nbsp;
+All counters are 64-bit, so you don't need to worry about overflows.
+<P>Numerous other tools are available to tell you about miss rates of programs.&nbsp;
+For the most part, however, they are oriented at people trying to design
+better cache hardware.&nbsp; For example, many such tools allow you to
+simulate multiple cache configurations at once, which is helpful if you
+are trying to compare the merits of different cache designs.
+<P>Cacheprof is different: it is targetted at programmers and algorithm
+designers, with the intention that you understand, and hopefully improve,
+the cache behaviour of your programs.&nbsp; You "improve" your program
+by reducing the number of capacity, and to a less extent, conflict misses.&nbsp;
+It seems reasonable to assume that improvements on one cache arrangement
+will carry over to other cache arrangements, even though the absolute miss
+rates, etc, may differ.&nbsp; Cacheprof allows you to simulate a variety
+of caches, although this is not its primary intention.
+<P>Cacheprof only profiles data reads and writes.&nbsp; There's no attempt
+whatsoever to profile instruction cache effects.&nbsp; For many programs,
+miss rates for instruction traffic are insignificant compared to those
+for data traffic.&nbsp; Most machines have split I and D primary caches,
+so I references won't mess up the D-cache, or vice versa.
+<BR>&nbsp;
+<H3>
+1.2&nbsp; How you use it</H3>
+Cacheprof is designed to be as non-intrusive as possible.&nbsp; It works
+with the standard GNU toolchain, on x86 platforms.&nbsp; You don't need
+rebuild or reconfigure any of the tools, but you will need to recompile
+programs in order to profile them.
+<P>You compile your programs in the normal way (ie, with gcc/g++/g77),
+but under the supervision of cacheprof.&nbsp; A cache simulator is linked
+into the resulting executable.
+<P>When the program runs, all (data) references are trapped and sent to
+the cache simulator.&nbsp; After execution finishes, detailed information
+is dumped into the file cacheprof.out.&nbsp; An auxiliary program, cacheprint,
+reads cacheprof.out and prints summaries for the whole program and for
+each instrumented procedure.&nbsp; It also prints annotated versions of
+source files specified on the command line.
+<P>Section 6 shows an example of use.
+<BR>&nbsp;
+<H3>
+1.3&nbsp; Stability and performance</H3>
+Cacheprof is not a toy.&nbsp; I developed it because I was frustrated at
+the lack of cache profiling tools when developing the data compressor <A HREF="http://sourceware.cygnus.com/bzip2/">bzip2</A>.&nbsp;
+In vain did I cast around the Internet looking for open-source cache profilers!&nbsp;
+Eventually I gave up in disgust and made my own.&nbsp; Section 7 contains
+further historical details.
+<P>The system works well enough to run large programs.&nbsp; I've cacheprof'd
+the compiler-proper ("cc1") in gcc-2.95.1; that builds and runs without
+difficulty.&nbsp; All 18 of the benchmarks in the SPEC CPU95 (8 in C, 10
+in Fortran77) suite run fine -- that's quite a lot of code.&nbsp; bzip2
+of course runs fine.
+<P>Because cacheprof instruments assembly code, you should be able to profile
+C++, Fortran77 or any other language that the GCC suite will compile.&nbsp;
+I haven't actually tested it on anything except C and Fortran, but I plan
+to do so soon.&nbsp; The disadvantage of instrumenting assembly code is
+that you're tied to the particular architecture -- x86 (AT&amp;T syntax)
+-- although I would like to be able in the longer term to port cacheprof
+to RISC architectures.&nbsp; Oh, and to the processor formerly known as
+Merced.
+<P>Profiled code is 5 to 6 times larger, than normal and runs 20 to 30
+times slower than normal, since every memory reference is trapped and sent
+to the cache simulator.&nbsp; Cacheprof tries very hard to detect and instrument
+every single memory access, right down to the implicit stack reads and
+writes created by CALL and RET instructions.&nbsp; REP-prefix instructions
+are too hard to instrument directly, so they are first translated to equivalent
+sequences of simpler instructions; eventual profiling results (of course)
+pertain to the original version, not the simplified one.
+<P>Some folks just want to know instruction, read and write counts, and
+do not care about cache misses.&nbsp; For these folks I have provided a
+less expensive form of profiling, which I call "level 1" profiling.&nbsp;
+Level 1 profiled binaries are "only" twice as big, and 10-15 times slower
+than normal.&nbsp; The default profiling level is level 2, which gives
+the full cache simulation discussed above.&nbsp; You have to ask specially
+for level 1 profiling.&nbsp; You can't mix level-1 and level-2 profiling;
+if you do, the resulting executable will print an error message and refuse
+to do anything else.
+<P>You can link unprofiled code into your executables.&nbsp; Counts pertaining
+to it will not show up in the results, but everything should work fine.&nbsp;
+Indeed, since you have to link at least the C library into pretty much
+everything, you're obliged to link some unprofiled code into each executable.&nbsp;
+For more accurate results, it would be best to build cacheprof'd versions
+of the C library and its friends (libm et al), but I haven't tried that.&nbsp;
+Yet.
+<P>The default cache arrangement is a 32 kbyte cache, with 32 byte lines
+and 2-way set associativity.&nbsp; I chose that since that's (allegedly)
+how the level 1 D-cache of my AMD K6-2 is arranged.&nbsp; Cacheprof can
+simulate a cache with any combination of the following parameters: size
+1k, 2k, 4k, 8k, 16k, 32k, 64k, 128k, 256k, 512k, 1M, 2M, 4M, 8M, line size
+of 8, 16, 32, 64 or 128 bytes, and associativities of 1 (direct-mapped),
+2, 4 and 8.&nbsp; That covers 99% of the caches you'll encounter in practice.&nbsp;
+For associative caches, a LRU replacement policy is simulated.
+<P>To change the cache arrangement, edit the Makefile and do 'make cacheclean
+; make'.&nbsp; You'll then need to re-link your programs.
+<BR>&nbsp;
+<H3>
+1.4&nbsp; Are the results meaningful?</H3>
+All very nice, but do the numbers mean anything?&nbsp; If you think they
+are an accurate representation of what's really going on, you are sadly
+deluded.&nbsp; The address sequence presented to the cache simulator differs
+from that encountered by the real hardware for at least the following reasons,
+and probably more:
+<UL>
+<LI>
+You get no counts at all for code which isn't instrumented.&nbsp; That's
+at least the C library, plus whatever bits of your own program you didn't
+ask to be profiled.&nbsp; You can improve this by compiling everything
+with profiling on, and (ultimately) recompiling the system libraries too.&nbsp;
+One day.</LI>
+</UL>
+
+<UL>
+<LI>
+System calls - the ultimate results of printfs, freads, etc, in your program
+-- may involve a trip into the Linux kernel.&nbsp; Cacheprof has no way
+to know how such an event will affect the cache, and there's no attempt
+to model it.</LI>
+</UL>
+
+<UL>
+<LI>
+Similarly, the kernel's normal business of handling context switches and
+interrupts pollutes the caches, and you have no control over it.</LI>
+</UL>
+
+<UL>
+<LI>
+Cacheprof assumes that the processor doesn't do speculative reads.&nbsp;
+A superscalar processor (viz, just about all processors, these days) may
+execute instructions beyond a branch without knowing which way the branch
+will go.&nbsp; This speculation could turn out to be wasted, but still
+create memory references (reads, at least).&nbsp; I don't know much about
+superscalar processor architecture -- perhaps speculative execution is
+stopped when a memory transaction occurs, or when a miss would occur.</LI>
+</UL>
+
+<UL>
+<LI>
+Virtual vs physical addressing of the cache.&nbsp; The stream of addresses
+simulated by cacheprof are virtual addresses.&nbsp; Unfortunately, most
+real hardware uses physically addressed caches, which means we ignore effects
+created by the OS's virtual-to-physical address mapping policy.&nbsp; Sigh.&nbsp;
+I need to think through the consequences of this one.</LI>
+</UL>
+For instruction, read and write counts, the numbers are accurate for parts
+of the program which were instrumented, and all the other parts contribute
+nothing.
+<P>The situation with cache misses is more complicated, since the cache
+effectively records the recent memory history of the entire system.&nbsp;
+Imagine a program which rapidly alternates between two procedures, P1 and
+P2.&nbsp; Each procedure fills the cache up with its own stuff every time
+it gets called.&nbsp; That means that both P1 and P2 will have high miss
+rates.&nbsp; If the program is recompiled so that P1 is instrumented but
+P2 is not, P1 may now be charged with a substantially lower miss rate,
+because the simulator never sees P2 throwing P1's stuff out of the cache,
+and therefore never sees P1 dragging it all back in.
+<P>Moral: cache miss behaviour is a global property, and it is misleading
+to think of P1 or P2 as simply causing cache misses' in isolation; rather,
+we should regard them as mutually conflicting.&nbsp; You have been warned
+:-)
+<P>Executive summary: omission of parts of the program from instrumentation
+decreases instruction and reference counts in expected ways, but may have
+non-obvious effects on miss rates.
+<P>I reckon that you are fairly safe, all in all, if all your code is instrumented,
+and your program spends 99% of its time in it.&nbsp; If it spends a lot
+of time in the C library or in system calls, you're on dodgy ground.
+<BR>&nbsp;
+<H3>
+1.5&nbsp; Other limitations of the implementation</H3>
+I haven't tried it on position-independent code (-fpic, -fPIC), which means
+that I don't know whether or not it works on ELF shared libraries (.so's).&nbsp;
+In principle this should be possible, but since I haven't actually done
+so, it's unlike to work as-is.
+<P>Cacheprof passes the -g flag to gcc/g++/g77, even if you didn't ask
+for it, so that it can figure which parts of the assembly code relate to
+which parts of the original source program.&nbsp; If you specify -O or
+-02 as well, you get the same kind of slightly illogical mapping as you
+do when single-stepping code compiled -O -g.&nbsp; As with debugging, if
+you need exact line number correspondence, turn off -O.&nbsp; Miss counts
+are an algorithmic property, so operating without -O dramatically increases
+the instruction, read and write counts, but has almost no effect on the
+miss counts.
+<P>Cacheprof instruments all reads and writes, even those setting up and
+clearing stack frames.&nbsp; This fools GDB, which seems to detect procedure
+boundaries at least partly by looking for prologue and epilogue sequences
+it knows about.&nbsp; The results of GDBing a cacheprof'd binary are ...
+well, complete chaos.
+<P>Cacheprof tries to preserve the behaviour of correct programs.&nbsp;
+If you code reads uninitialised memory, writes beyond the end of arrays
+or otherwise shows signs of moral and spiritual decay, it may well behave
+differently when instrumented.&nbsp; I spent hours searching for a (non-)bug
+in cacheprof for this very reason.&nbsp; Remedy (and good general advice):
+check for bad behaviour using Purify (real-money software, alas), or Tristan
+Gingold's GPLd Checker (www.gnu.org); the latter seems to work on x86-linux
+with gcc-2.95.1, at least.
+<P>I don't guarantee to cover all the x86 opcodes that GCC will ever spew
+out.&nbsp; If you're unlucky enough to discover one, cacheprof (cacheann,
+actually) will die thusly, usually on some way-out mutant floating-point
+opcode:
+<P>&nbsp;&nbsp;&nbsp;<FONT FACE="Courier New,Courier"><FONT SIZE=+1> (stdin):3529:
+syntax error on `fild -2(%ebp)'</FONT></FONT>
+<P>or it might die complaining of an "unhandled instruction set artefact".&nbsp;
+If so, do mail me (jseward@acm.org) at least the message, and preferably
+entire assembly input, so I can fix it.&nbsp; Alternatively, fix it as
+follows: the above message means that <FONT FACE="Courier New,Courier"><FONT SIZE=+1>fild</FONT></FONT>
+opcode is not implemented.&nbsp; Fix it by adding the opcode to the Opcode
+data defn in Arch_x86.hs and giving it an entry in the big table which
+follows, and then 'make cleanish &amp;&amp; make' to rebuild.&nbsp; "Unhandled
+instruction set artefact" and other complaints are only a little harder
+to fix yourself.
+<P>The driver might well complain about "can't map flags", or worse, act
+wrong, if you pass obscure flags to your compiler.&nbsp; Please mail me
+if that happens.
+<P>I'm sure there are other limitations, but I can't remember them right
+now.&nbsp; Today is 29 November 1999; just enough time left to slip in
+a subtle Y2K bug of some kind :-)
+<BR>&nbsp;
+<H3>
+1.6&nbsp; The license</H3>
+Cacheprof is licensed under the GNU General Public License, version 2.&nbsp;
+Read the file LICENSE in the source distribution for details.
+<BR>&nbsp;
+<BR>&nbsp;
+<H1>
+2&nbsp; How to use it</H1>
+
+<H3>
+2.1&nbsp; Basics</H3>
+Compile as much of your program as possible (preferably all of it) in whatever
+way you did before, with one alteration: place the command 'cacheprof'
+in front of all invokations of gcc, g++ or g77.&nbsp; For example, if you
+previously did this:
+<P><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; gcc -Wall
+-O -I/path/to/includes -c foo.c</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; gcc -Wall
+-O -I/path/to/includes -c bar.c</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; gcc -o
+xyzzy foo.o bar.o -L/path/to/libs -ldizzylizzy</FONT></FONT>
+<P>change your Makefile (or whatever) so that this happens:
+<P><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; cacheprof
+gcc -Wall -O -I/path/to/includes -c foo.c</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; cacheprof
+gcc -Wall -O -I/path/to/includes -c bar.c</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; cacheprof
+gcc -o xyzzy foo.o bar.o -L/path/to/libs -ldizzylizzy</FONT></FONT>
+<P>This example links in the library <FONT FACE="Courier New,Courier"><FONT SIZE=+1>libdizzylizzy</FONT></FONT>,
+and you should of course have previously built that with cacheprof, although
+the program will still work if you haven't.&nbsp; See the Section 1.5 for
+a discussion of what happens if you don't profile some parts of your program.&nbsp;
+Cacheprof hasn't been tested for compiling position-independent code, so
+you'd be best off compiling <FONT FACE="Courier New,Courier"><FONT SIZE=+1>libdizzylizzy</FONT></FONT>
+statically, ie to <FONT FACE="Courier New,Courier"><FONT SIZE=+1>libdizzylizzy.a</FONT></FONT>.
+<P>You then run your program in the usual way.&nbsp; It should produce
+the message
+<P><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; ==cacheprof==
+level-2 instrumented program: startup</FONT></FONT>
+<P>and, on completion, a summary, like this:
+<P><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; ==cacheprof==
+level-2 instrumented program: run complete</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; ==cacheprof==
+1,259,420,409 insns</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; ==cacheprof==&nbsp;&nbsp;
+209,716,905 refs&nbsp;&nbsp; (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+703 rd +&nbsp;&nbsp; 209,716,202 wr)</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; ==cacheprof==&nbsp;&nbsp;
+117,965,302 misses (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+400 rd +&nbsp;&nbsp; 117,964,902 wr)</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; ==cacheprof==
+93.05 seconds, 13.53 MIPS</FONT></FONT>
+<P>Detailed information from the run is dumped into the file cacheprof.out.&nbsp;
+It's a text file; you can read it if you really like, although you won't
+be much the wiser.&nbsp; (Note: the miss rate for this example program
+is atypically large, around 50%.&nbsp; More reasonable workloads are closer
+to the 5% mark).
+<P>Run <FONT FACE="Courier New,Courier"><FONT SIZE=+1>cacheprint</FONT></FONT>
+in the directory where cacheprof.out exists to see whole-program and per-procedure
+summaries.&nbsp; To see annotated source code, pass the names of the source
+files in question to cacheprint, for example: <FONT FACE="Courier New,Courier"><FONT SIZE=+1>cacheprint
+foo.c bar.c</FONT></FONT>.&nbsp; Cacheprint doesn't have any other options
+-- it's simple to use.&nbsp; Source lines which generate memory accesses
+are annotated with two numbers: the number of references and the number
+of misses.
+<P>Cacheprint will attempt to guess where procedures begin in source files,
+and print a summary for the procedure at that point.&nbsp; It's guessing
+heuristic is pretty ropey and sometimes gets it a few lines too early.&nbsp;
+If you have inlined functions in your program, the results will be utterly
+confusing (but still correct, I hope).
+<P>Cacheprof.out is created afresh after every run.&nbsp; Profiled binaries
+also append a single-line summary to cacheprof.out.summary.&nbsp; This
+is an experimental hack facilitating accumulation of costs over multiple
+runs.
+<BR>&nbsp;
+<H3>
+2.2&nbsp; Options for cacheprof</H3>
+You can pass args to cacheprof before the compile-command, like this:
+<P><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp; cacheprof --oink
+--moo gcc -Wall -O -I/path/to/includes -c foo.c</FONT></FONT>
+<P>Allowable flags are:
+<UL>
+<LI>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+1>--dryrun&nbsp;</FONT></FONT>
+Don't do anything; just show the commands that would be run</LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+1>-v&nbsp;</FONT></FONT> Be
+verbose</LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+1>--help&nbsp;</FONT></FONT>
+Print this summary</LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+1>--level2</FONT></FONT>&nbsp;
+Do full-scale cache profiling (the default).</LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+1>--level1</FONT></FONT>&nbsp;
+Only count instructions, reads and writes.&nbsp; Sometimes this is all
+you want.&nbsp; The resulting binary is about twice as fast and half the
+size of a level-2 profiled binary.&nbsp; You can't mix level 1 and level
+2 profiling.</LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+1>--level0</FONT></FONT>&nbsp;
+Don't annotate the assembly at all; just parse, simplify and prettyprint
+it.&nbsp; This is for debugging cacheprof.</LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+1>--cacheprofdir=/foo/bar</FONT></FONT>&nbsp;
+Cacheprof needs to know where it is installed.&nbsp; Normally it reads
+this info from the environment variable CACHEPROFDIR, which should be set
+during installation.&nbsp; However, this flag overrides that setting.</LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+1>--no-g</FONT></FONT>&nbsp;
+Don't ask the compiler to produce debugging information.&nbsp; The upshot
+is that you won't get any line number info in the final output.&nbsp; Don't
+use this flag unless you are doing some wierd experiment.</LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+1>-H16m</FONT></FONT>&nbsp;
+Set heap size for cacheann to (eg) 16 megabytes.&nbsp; If you compile with
+ghc, you should never need this.</LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+1>-K1m</FONT></FONT>&nbsp;
+Set stack size for cacheann to (eg) 1 megabyte.&nbsp; If cacheann dies
+with a stack overflow, I'd be interested to hear about it.</LI>
+
+<LI>
+<FONT FACE="Courier New,Courier"><FONT SIZE=+1>--ddump-foo</FONT></FONT>&nbsp;
+Dump debugging information to stderr after annotation phase <FONT FACE="Courier New,Courier"><FONT SIZE=+1>foo</FONT></FONT>.&nbsp;
+Endless entertainment for all the family.&nbsp; Foo can be one of the following:</LI>
+</UL>
+
+<UL><FONT FACE="Courier New,Courier"><FONT SIZE=+1>preparsed&nbsp; </FONT></FONT>after
+breaking the assembly into labels, pseudo-op lines and real instructions
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>parsed&nbsp;&nbsp;&nbsp;
+
+</FONT></FONT>after parsing instructions
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>simplified&nbsp; </FONT></FONT>after
+simplifying REP-prefix insns, and the LEAVE insn
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>ident-bbs&nbsp; </FONT></FONT>after
+identification of basic blocks (a conservative approximation thereof)
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>use-bbs&nbsp;&nbsp;
+
+</FONT></FONT>after adding insn count increments at the start of basic
+blocks
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>annotated&nbsp; </FONT></FONT>after
+adding annotations to insns which read and write memory
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>ccs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+</FONT></FONT>after assigning a "cost centre" to each insn which reads
+or writes memory
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>synth&nbsp;&nbsp;&nbsp;&nbsp;
+
+</FONT></FONT>after inserting calls to the cache profiler
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>peephole&nbsp; 
+</FONT></FONT>after
+a simple peephole pass to remove some idiocies</UL>
+Cacheprof looks at the flags and args you pass to your compiler to figure
+out what to do.&nbsp; This has some consequences:
+<P>Gprof-style profiling can't be combined with cacheprof-ing.&nbsp; If
+you specify -p or -pg, cacheprof will barf.&nbsp; Also, cacheprof needs
+to be able to sneakily grab the assembly output of your compiler, so -pipe
+isn't allowed either.
+<P>You can't debug cacheprof'd code, because the instrumentation confuses
+GDB.&nbsp; Cacheprof doesn't disallow the -g flag, but it will ignore it.
+<P>For all other flags, cacheprof tries to guess which particular phase
+to pass the flag to.&nbsp; If it can't, it gives the flag to all phases,
+and prints a warning message of the form "can't map flag ...".&nbsp; If
+this happens frequently to you, edit the flag_mapping_table in CacheProf.hs
+and recompile -- it isn't hard to figure out what to say.
+<BR>&nbsp;
+<H3>
+2.3&nbsp; The annotated assembly (.sA, -SA) stage</H3>
+This is useful background info for hackers.
+<P>Traditional gcc, g++, g77, as we know and love them, will translate
+input files, stopping at a point often indicated by a flag.&nbsp; For example,
+-E means "stop after preprocessing", -S stops at assembly, and -c produces
+object code.
+<P>Cacheprof makes gcc/g++/g77 behave as if there were a new stage, which
+lives between the normal assembly (-S) and object code (-c) phases: annotated
+assembly.&nbsp; The relevant flag is -SA, and the relevant file extension
+is .sA.&nbsp; You can do all the expected things, for example:
+<P><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; cacheprof
+gcc -SA foo.c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -- produces
+foo.sA</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; cacheprof
+gcc -c foo.sA bar.s&nbsp;&nbsp; -- produces foo.o and bar.o</FONT></FONT>
+<P>What an amazing system :-)
+<BR>&nbsp;
+<H3>
+2.4&nbsp; Manufacturing new caches with cachegen</H3>
+You can create a cache simulator for a variety of caches using cachegen.&nbsp;
+Pass it, as parameters, the cache size in bytes, the line size in bytes,
+and the associativity, for example:
+<P><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; cachegen
+32768 32 2</FONT></FONT>
+<P>and this writes, to stdout, a file which implements the specified cache,
+using an LRU replacement algorithm.&nbsp; To reconfigure cacheprof to use
+this new cache, first do 'make cleancache', then copy cachegen's output
+into a file called to cachesim_doref.c, then do 'make cachesim.o', and
+finally re-link your program.&nbsp; You don't need a Haskell compiler to
+do any of this.
+<P>Alternatively, edit the params in the Makefile, and do 'make cleancache
+; make cachesim.o'.
+<BR>&nbsp;
+<H1>
+3&nbsp; How it works</H1>
+Cacheprof inspects your compile command.&nbsp; For each input which needs
+to be translated across the boundary from assembly code to object code,
+cacheprof arranges to intercept the assembly output, by breaking the original
+compile command up into pieces.&nbsp; The assembly code is fed to cacheann,
+which parses and analyses the assembly, and spews out an instrumented version
+of it.&nbsp; Cacheprof picks this up and steers it through subsequent assembly
+and linkage phases as necessary.
+<P>Cacheprof takes care to ask the compiler(s) proper to emit debugging
+information into the assembly, even if you didn't ask for it.&nbsp; Cacheann
+uses this info to figure out, for each instruction which does a read or
+write, which source file, line and procedure to "send the bill" to.&nbsp;
+The debugging info is removed from the final annotated assembly, since,
+as previous discussed, GDB can't debug annotated code.&nbsp; If, for some
+reason debugging info isn't available, cacheann can usually guess the current
+file and function name for labels and other artefacts in the assembly source.
+<P>At the final linkage stage, cacheprof links in cachesim.o, which contains
+startup and shutdown routines, and the cache simulator proper.
+<P>Each instruction which reads and writes memory in the instrumented assembly
+has, associated with it, a "cost center" (try --ddump-ccs to see them).&nbsp;
+Just before each memory-touching instruction, cacheann inserts a call to
+an intermediate piece of link code, in cacheprof_hooks2_x86.s, passing
+as parameters the address of memory to be read/written, and the address
+of the cost center associated with this instruction.&nbsp; The link piece
+of code saves the machine state on the C stack, and calls into the cache
+simulator proper, again passing the address and cost center.&nbsp; The
+simulator updates the simulated cache.&nbsp; If a miss results, the miss
+count in the supplied cost center is incremented.
+<P>Control then returns to the link code, which restores the machine state
+and returns to the program proper.&nbsp; It's important to understand that
+the simulator does not and cannot actually simulate the contents of the
+cache, so it can't actually supply the result for memory reads.&nbsp; That
+is done by simply executing the instruction after returning from the link
+code.
+<P>When execution finishes, all cost centers and associated file, function
+and line-number information is dumped into cacheprof.out, in one great
+big mess.&nbsp; Cacheprint reads this and merges together information from
+all instrumented object files, so that it has a picture of the program's
+behaviour as a whole.
+<P>The mechanism is critically dependant on the fact that a call up to
+the cache simulator is entirely transparent to the original program, providing
+that the link code carefully saves and restores enough of the machine state.&nbsp;
+On x86 we can just about get away with this because there are so few integer
+registers, and none of the FP registers need be saved.&nbsp; For almost
+all other architectures, a save/restore at each memory reference will be
+prohibitively expensive, so in the long term it is probably better for
+the straight-line code to dump (address, cost-center) pairs into a smallish
+trace buffer and only call out-of-line to the simulator when the trace
+buffer is full.&nbsp; This is all standard stuff in cache-simulation circles.&nbsp;
+Unfortunately this will probably increase the size of instrumented code
+still further.
+<BR>&nbsp;
+<H1>
+4&nbsp; How to install it</H1>
+
+<H3>
+4.1&nbsp; Installing pre-built binaries</H3>
+Very easy.&nbsp; Get hold of the relevant tarball, create an installation
+directory and untar in there -- at the moment I don't create the directory
+for you.&nbsp; Set the environment variable CACHEPROFDIR to be that directory.&nbsp;
+Then add $CACHEPROFDIR to your path.&nbsp; The programs cacheprof, cacheprint,
+cachegen and cacheann should then be available.&nbsp; You shouldn't run
+cacheann directly.
+<BR>&nbsp;
+<H3>
+4.2&nbsp; Building from source</H3>
+Compiling from source is very easy, once you have a Haskell compiler installed.&nbsp;
+Haskell compilers are freely available; see the next section for details.
+<P>You should be able to compile cacheprof with any compiler which implements
+the Haskell98 language standard correctly.&nbsp; The available candidates
+are: the Glasgow Haskell Compiler (ghc), version 4.04pl1 (or later; perhaps
+4.06 by the time you read this), the Chalmers Haskell Compiler (hbc), version
+0.9999.5b, and Niklas Rojemo's / Malcolm Wallace's nhc98 compiler, version
+1.0pre13 or later.
+<P>I recommend you use ghc for production use; it produces fast code and
+has an unobtrusive run-time system.&nbsp; hbc also produces fast code,
+but unfortunately seems to have a bug which causes cacheann to sometimes
+loop, so I can't recommend this, alas.&nbsp; nhc98 produces smaller and
+slower binaries, but is very portable and easy to install.&nbsp; I suggest
+you use it to get started if you have difficulties installing ghc.
+<P>I should perhaps mention that my day job is as a ghc developer.&nbsp;
+If you encounter difficulties with ghc, mail me or some other member of
+our Merry Crew.
+<P>If you plan to do any serious tinkering with Cacheprof, you really ought
+to install the excellent interactive Haskell interpreter called "Hugs98".&nbsp;
+A common way to develop Haskell is to work inside Hugs, compiling to a
+standalone binary with one of the above compilers only when a production
+version is needed.&nbsp; Hugs98 is very portable, easy to install, and
+runs on most platforms.
+<P>All four systems are open-source of one kind or another (ghc, hbc and
+hugs have BSD-style licenses), and all have binary distributions available
+for at least x86-linux.
+<BR>&nbsp;
+<H3>
+4.3&nbsp; Haskell resources</H3>
+Everything you could possibly ask for -- introduction to the language,
+documentation, libraries, and links to the compilers, are conveniently
+located at http://haskell.org.
+<BR>&nbsp;
+<H3>
+4.4&nbsp; How to contribute</H3>
+Cacheprof is very much a work in progress, and contributions are welcomed.&nbsp;
+There are many useful things you can do.&nbsp; Here's the contents of my
+TODO list:
+<H4>
+Validation</H4>
+The single most important task, since the system is worthless if its numbers
+are bogus.
+<UL>
+<LI>
+Check the annotations on instructions in Arch_x86.hs, and the special cases
+(OI_Special) in annsOf in CacheAnn.hs.&nbsp; I'm particularly unclear about
+the floating point instructions, and would appreciate validation/correction
+of my annotations.</LI>
+</UL>
+
+<UL>
+<LI>
+Validation of the cache simulation in cachesim_doref.c.&nbsp; I think I
+simulate caches correctly, but ...</LI>
+</UL>
+
+<UL>
+<LI>
+Independent validation by running SPEC95 tests and comparing reported insn,
+reference and miss counts against published figures for SPEC95 on x86s.&nbsp;
+You'll need to find some published results.&nbsp; Yes, they are out there
+on the web.&nbsp; Try offering up "SPEC95 NEAR cache" to Altavista Advanced
+Search.</LI>
+</UL>
+
+<UL>
+<LI>
+Independent validation by using Mikael Pettersson's x86 Performance-Monitoring
+Counters for Linux (http://www.csd.uu.se/~mikpe/linux/perfctr/) to collect
+real insn, reference and miss counts, and seeing if cacheprof can generate
+the same results.</LI>
+</UL>
+
+<UL>
+<LI>
+Write simple programs for which you (think!) you know the cache behaviour,
+and see if&nbsp; cacheprof's results agree.</LI>
+</UL>
+
+<UL>
+<LI>
+Is it useful?&nbsp; Profile your own programs and see if you can gain any
+interesting insights, and, ultimately, speedups.</LI>
+</UL>
+
+<H4>
+Functionality</H4>
+
+<UL>
+<LI>
+Handle very obscure opcodes.&nbsp; Cacheann is sure to die on obscure opcodes
+which I have not yet handled.&nbsp; If so, fix it as described in Section
+1.5.</LI>
+</UL>
+
+<UL>
+<LI>
+See what problems there are running profiling C++ and Fortran77 (g77) code.&nbsp;
+Certainly for C++,&nbsp; cacheprint will need to know how to demangle function
+names.&nbsp; I am also concerned that the startup/shutdown hooks (ctors,
+dtors) that cacheprof puts in the assembly code will interact badly with
+the mechanisms g++ uses to initialise static constructors -- in&nbsp; particular,
+I don't know if/how it is possible to arrange for cacheprof to be started
+up before the static constructor code is run -- and vice versa for shutdown.</LI>
+</UL>
+
+<UL>
+<LI>
+See what problems there are profiling position independent code (-fPIC
+for gcc).</LI>
+</UL>
+
+<UL>
+<LI>
+(big project): Write some kind of pretty GUI-based program to display profiling
+results better, and more interactively, than cacheprint.</LI>
+</UL>
+
+<UL>
+<LI>
+(very big project):&nbsp; Implement level 3 profiling, in which we calculate
+(an approximation) to the 'conflicts against me' and 'prefetches for me'
+relations between insns which access memory.</LI>
+</UL>
+
+<H4>
+Portability</H4>
+
+<UL>
+<LI>
+(huge project).&nbsp; Make it work for Sparcs, or some other architecture.&nbsp;
+The critical issue is how to implement the calls out to the Wr/Rd/Mo_hook
+functions and save and restore the machine state sufficiently cheaply.&nbsp;
+For architectures with many registers (anything not x86 :), the current
+call-at-every-mem-access scheme is probably impractical.&nbsp; A better
+and more portable long term solution is to plant in-line code to place
+referenced addresses (&amp; associated sizes and sourcepoints) into a trace
+buffer, which is periodically emptied by a call up to the simulator.</LI>
+</UL>
+
+<UL>
+<LI>
+Rewrite CachePrint.hs and CacheProf.hs, so as to impose more structure.&nbsp;
+These programs are a mess -- they were thrown together.&nbsp; Especially
+for CacheProf.hs, you need a pretty good understanding of how they work
+before messing with them.</LI>
+</UL>
+
+<UL>
+<LI>
+Haskell hackers may want to do time/space profiling on cacheann and cacheprint.&nbsp;
+These programs have a lot of performance stupidities which deserve attention.</LI>
+</UL>
+
+<H4>
+Non-projects</H4>
+
+<UL>
+<LI>
+Translation into C/C++/Java (etc).&nbsp; Here's my Bad Attitude on that:</LI>
+</UL>
+
+<BLOCKQUOTE>Either you know Haskell, in which case you won't want to translate
+into any other language, or you don't know Haskell, in which case by the
+time you find out enough about it, you'll find it a lot quicker to make
+the mods you need in Haskell rather than translate to C++/whatever.</BLOCKQUOTE>
+
+<BLOCKQUOTE>Seriously, cacheprint has to deal with huge volumes of data
+and might benefit from a good C implementation.&nbsp; For the other two
+(cacheann, cacheprof), forget it.
+<P>Of course, if you have some Worthy Proposal like building this functionality
+directly into gcc, I would lose my Bad Attitude and instead have a Very
+Good Attitude Indeed.
+<BR>&nbsp;
+<BR>&nbsp;</BLOCKQUOTE>
+
+<H1>
+5&nbsp; If you have problems</H1>
+Mail me (jseward@acm.org).
+<BR>&nbsp;
+<H1>
+6&nbsp; An example</H1>
+Here's a short example, using the following program (called example.c):
+<P><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; #include
+&lt;stdio.h></FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; #define
+SIZE 1024</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; int arr[SIZE][SIZE];</FONT></FONT>
+<P><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; void cmTraverse
+( void ) {</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+int i, j;</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+for (i = 0; i &lt; SIZE; i++)</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+for (j = 0; j &lt; SIZE; j++)</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+arr[i][j] = (i + j);</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; }</FONT></FONT>
+<P><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; void rmTraverse
+( void ) {</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+int i, j;</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+for (i = 0; i &lt; SIZE; i++)</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+for (j = 0; j &lt; SIZE; j++)</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+arr[j][i] = (i + j);</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; }</FONT></FONT>
+<P><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; int main
+( int argc, char** argv ) {</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+printf ( "hello, world!\n" );</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+cmTraverse();</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+rmTraverse();</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+return 0;</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; }</FONT></FONT>
+<P>The program traverses a big square array in both row-major and column-major
+fashion.&nbsp; cmTraverse and rmTraverse look almost identical, but their
+cache friendlyness is dramatically different.&nbsp;&nbsp; We now compile
+and run the program in the normal way, except that the compile command
+is presented to cacheprof:
+<P><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; sewardj@muraroa:~$
+cacheprof gcc -O -Wall -o example example.c</FONT></FONT>
+<P><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; sewardj@muraroa:~$
+./example</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; ==cacheprof==
+level-2 instrumented program: startup</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; hello,
+world!</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; ==cacheprof==
+level-2 instrumented program: run complete</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; ==cacheprof==&nbsp;&nbsp;&nbsp;
+12,594,205 insns</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; ==cacheprof==&nbsp;&nbsp;&nbsp;&nbsp;
+2,097,171 refs&nbsp;&nbsp; (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+9 rd +&nbsp;&nbsp;&nbsp;&nbsp; 2,097,162 wr)</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; ==cacheprof==&nbsp;&nbsp;&nbsp;&nbsp;
+1,179,654 misses (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+3 rd +&nbsp;&nbsp;&nbsp;&nbsp; 1,179,651 wr)</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;&nbsp; ==cacheprof==
+0.93 seconds, 13.54 MIPS</FONT></FONT>
+<P>The program prints some handy summary stats, and dumps detailed info
+into cacheprof.out.&nbsp; Running 'cacheprint example.c' then gives the
+following (you may need to make your window wider, and get out your magnifying
+glass):
+<P><FONT FACE="Courier New,Courier">&nbsp;&nbsp; 12,594,205 instructions,&nbsp;
+2,097,171 references,&nbsp; 1,179,654 misses.</FONT>
+<P><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp; SIZE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+RD-&amp;-WR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+MISSES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RATE</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; ---------------------------------------------------------------</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; TOTAL:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+2,097,171&nbsp; 100.%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1,179,654&nbsp;
+100.%&nbsp;&nbsp;&nbsp;&nbsp; 56.2%</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; 1 byte&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0&nbsp;&nbsp; 0.0%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0&nbsp;&nbsp; 0.0%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NaN%</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; 2 byte&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0&nbsp;&nbsp; 0.0%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0&nbsp;&nbsp; 0.0%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NaN%</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; 4 byte&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+2,097,171&nbsp; 100.%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1,179,654&nbsp;
+100.%&nbsp;&nbsp;&nbsp;&nbsp; 56.2%</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; 8 byte&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0&nbsp;&nbsp; 0.0%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0&nbsp;&nbsp; 0.0%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NaN%</FONT>
+<P><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp; SIZE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+READS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+MISSES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RATE</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; ---------------------------------------------------------------</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; TOTAL:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+9&nbsp; 100.%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+3&nbsp; 100.%&nbsp;&nbsp;&nbsp;&nbsp; 33.3%</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; 1 byte&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0&nbsp;&nbsp; 0.0%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0&nbsp;&nbsp; 0.0%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NaN%</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; 2 byte&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0&nbsp;&nbsp; 0.0%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0&nbsp;&nbsp; 0.0%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NaN%</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; 4 byte&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+9&nbsp; 100.%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+3&nbsp; 100.%&nbsp;&nbsp;&nbsp;&nbsp; 33.3%</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; 8 byte&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0&nbsp;&nbsp; 0.0%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0&nbsp;&nbsp; 0.0%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NaN%</FONT>
+<P><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp; SIZE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+WRITES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+MISSES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RATE</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; ---------------------------------------------------------------</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; TOTAL:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+2,097,162&nbsp; 100.%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1,179,651&nbsp;
+100.%&nbsp;&nbsp;&nbsp;&nbsp; 56.2%</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; 1 byte&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0&nbsp;&nbsp; 0.0%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0&nbsp;&nbsp; 0.0%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NaN%</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; 2 byte&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0&nbsp;&nbsp; 0.0%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0&nbsp;&nbsp; 0.0%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NaN%</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; 4 byte&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+2,097,162&nbsp; 100.%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1,179,651&nbsp;
+100.%&nbsp;&nbsp;&nbsp;&nbsp; 56.2%</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; 8 byte&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0&nbsp;&nbsp; 0.0%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0&nbsp;&nbsp; 0.0%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NaN%</FONT>
+<P><FONT FACE="Courier New,Courier">&nbsp;&nbsp; 1 source files, 3 function
+names, and 21 program points</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; are mentioned in `cacheprof.out'.</FONT>
+<BR>&nbsp;
+<P><FONT FACE="Courier New,Courier">&nbsp;&nbsp; FUNCTION NAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+RD-&amp;-WR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %&nbsp; cum-%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+MISSES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %&nbsp; cum-%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+RATE</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; --------------------------------------------------------------------------------------</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; rmTraverse(example.c)&nbsp;&nbsp;&nbsp;
+1,048,583&nbsp; 49.9%&nbsp; 49.9%&nbsp;&nbsp;&nbsp; 1,048,579&nbsp; 88.8%&nbsp;
+88.8%&nbsp;&nbsp;&nbsp;&nbsp; 99.9%</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; cmTraverse(example.c)&nbsp;&nbsp;&nbsp;&nbsp;
+1,048,581&nbsp; 49.9%&nbsp; 99.9%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 131,074&nbsp;
+11.1%&nbsp; 99.9%&nbsp;&nbsp;&nbsp;&nbsp; 12.5%</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; main(example.c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+7&nbsp;&nbsp; 0.0%&nbsp; 100.%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+1&nbsp;&nbsp; 0.0%&nbsp; 100.%&nbsp;&nbsp;&nbsp;&nbsp; 14.2%</FONT>
+<P><FONT FACE="Courier New,Courier">&nbsp;&nbsp; The remaining 0 functions
+contributed less than 0.01% of the reads-&amp;-writes,</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp; and less than 0.01% of
+the misses.</FONT>
+<BR>&nbsp;
+<P><FONT FACE="Courier New,Courier">--------------------------------------------------------------------------------------------</FONT>
+<BR><FONT FACE="Courier New,Courier">--- Annotated source: example.c ------------------------------------------------------------</FONT>
+<BR><FONT FACE="Courier New,Courier">--------------------------------------------------------------------------------------------</FONT>
+<BR>&nbsp;
+<P><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+#include &lt;stdio.h></FONT>
+<P><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+#define SIZE 1024</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+int arr[SIZE][SIZE];</FONT>
+<P><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+void cmTraverse ( void )</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp; {</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+int i, j;</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+for (i = 0; i &lt; SIZE; i++)</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+for (j = 0; j &lt; SIZE; j++)</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp; 1,048,576&nbsp;&nbsp;&nbsp;
+131,073&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; arr[i][j]
+= (i + j);</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp; }</FONT>
+<P><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+void rmTraverse ( void )</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp; {</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+int i, j;</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+for (i = 0; i &lt; SIZE; i++)</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+for (j = 0; j &lt; SIZE; j++)</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp; 1,048,576&nbsp; 1,048,576&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+arr[j][i] = (i + j);</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp; }</FONT>
+<P><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+int main ( int argc, char** argv )</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp; {</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;
+printf ( "hello, world!\n" );</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;
+cmTraverse();</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;
+rmTraverse();</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+return 0;</FONT>
+<BR><FONT FACE="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp; }</FONT>
+<P>The sordid outcome of this investigation is that one of the row-major
+traversal is far worse than column-major traversal (I think I have the
+row- and column- descriptions the wrong way round, doesn't matter).&nbsp;
+The particular array sizes were chosen so as to illustrate the worst-possible
+behaviour for the simulated cache, which is the L1 data cache for an AMD
+K6-2.&nbsp; The miss rates differ by a factor of 8.&nbsp; Running the (uninstrumented)
+program 100 times on a real K6, the standard gprof profiling tool indicates
+that ...
+<P><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp; %&nbsp;&nbsp;
+cumulative&nbsp;&nbsp; self&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+self&nbsp;&nbsp;&nbsp;&nbsp; total</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;time&nbsp;&nbsp;
+seconds&nbsp;&nbsp; seconds&nbsp;&nbsp;&nbsp; calls&nbsp; ms/call&nbsp;
+ms/call&nbsp; name</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;68.64&nbsp;&nbsp;&nbsp;&nbsp;
+11.93&nbsp;&nbsp;&nbsp; 11.93&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 100&nbsp;&nbsp;
+119.30&nbsp;&nbsp; 119.30&nbsp; rmTraverse</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp;31.36&nbsp;&nbsp;&nbsp;&nbsp;
+17.38&nbsp;&nbsp;&nbsp;&nbsp; 5.45&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 100&nbsp;&nbsp;&nbsp;
+54.50&nbsp;&nbsp;&nbsp; 54.50&nbsp; cmTraverse</FONT></FONT>
+<BR><FONT FACE="Courier New,Courier"><FONT SIZE=+1>&nbsp; 0.00&nbsp;&nbsp;&nbsp;&nbsp;
+17.38&nbsp;&nbsp;&nbsp;&nbsp; 0.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+1&nbsp;&nbsp;&nbsp;&nbsp; 0.00 17380.00&nbsp; main</FONT></FONT>
+<P>ie the real timing ratio is about 2.2:1 -- not as dramatic as the 8:1
+difference in miss rates, probably since (1) executing instructions also
+takes time (alas :-), and (2) both procedures also miss badly on my weedy
+(Socket-7-typical) 512k second-level cache (arr is 4 megabytes in size).&nbsp;
+Perhaps I should have simulated that instead.&nbsp; Ah well.
+<P>Finally, timing the uninstrumented program shows it runs in about 0.17
+second, and since we know it runs for 12.594 million instructions, the
+execution rate is about 72 MIPS, which is pretty appalling for a 350MHz
+K6-2.&nbsp; That just confirms that this program does very badly in the
+cache -- by comparison, most "normal" programs run at between 150 and 250
+MIPS on this machine.&nbsp; (note.&nbsp; MIPS == Meaningless Indication
+of Processor Speed.&nbsp; Never forget that).
+<BR>&nbsp;
+<H1>
+7&nbsp; How cacheprof came to be</H1>
+After the initial release of bzip2-0.1pl2 in August 1997, I spent a lot
+of time trying to improve bzip2's dismal compression speed, without much
+success.&nbsp; I fairly rapidly came to the conclusion that memory effects
+had a large bearing on performance.&nbsp; Any decent book on computer architecture
+will tell you that, but discovering that it afflicts one's own programs
+really bought it home to me.
+<P>I started to look around for open-source tools which I could use to
+quantify memory/cache effects in bzip2, and was totally amazed not to find
+any.&nbsp; Having read many papers about sorting algorithms (the slow part
+of bzip2) I was also surprised to discover that the (academic) algorithm
+community places a lot of emphasis on developing algorithms with lower
+instruction counts, but almost no emphasis on designing more cache-efficient
+algorithms.&nbsp; I find this attitude quite illogical, given the relative
+costs of instructions vs cache misses on contemporary architectures.
+<P>For a long time I mused on how to build a cache profiler, but did nothing.
+<P>In early summer '99, I knocked up a new back end to the lcc C compiler.&nbsp;
+The back end emitted C (bizarrely), but instrumented so that memory references
+were passed to a cache simulator.&nbsp; It was a terrible hack, but it
+worked well enough to tell me interesting things about bzip2.&nbsp; For
+me, it "proved the concept", but wasn't a satisfactory solution.&nbsp;
+It was tied to C, to the specific C compiler, and didn't catch all references.&nbsp;
+I wasn't sure how to proceed.
+<P>Later in the summer, my excellent colleague Simon Marlow suggested that
+it would be much simpler to parse and annotate assembly code.&nbsp; This
+was the critical idea which made cacheprof practical.&nbsp; Many weekends
+and late nights later, this is the result.
+<BR>&nbsp;
+</BODY>
+</HTML>

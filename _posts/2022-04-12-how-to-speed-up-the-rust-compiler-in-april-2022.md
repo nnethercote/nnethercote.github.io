@@ -81,7 +81,7 @@ Here are the PRs.
 - [#95794](https://github.com/rust-lang/rust/pull/95794) (3 commits, filed
   April 8): Basic refactorings.
 - [#95928](https://github.com/rust-lang/rust/pull/95928) (5 commits, filed
-  April 11, not yet merged): Avoided some cloning, giving up to 3% wins.
+  April 11): Avoided some cloning, giving up to 3% wins.
 
 Phew! Many thanks to [@petrochenkov](https://github.com/petrochenkov) for
 reviewing all these PRs.
@@ -305,7 +305,7 @@ and for enabling bigger improvements. Any time I want to dive deep into a new
 piece of code, I start by doing refactorings. For this code I made over 50
 commits, and around 90% of them were refactorings that didn't improve
 performance. But I couldn't have made the 10% that did improve performance
-without the other 90%. These changes don't just help me. other people will find
+without the other 90%. These changes don't just help me. Other people will find
 this code easier to read and modify now.
 
 Finally, note that for all this effort, I've only improved the constant factors

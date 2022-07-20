@@ -24,9 +24,8 @@ building the Rust compiler on Linux.
 [@lqd](https://github.com/lqd) enabled PGO for the Rust compiler on Windows,
 with help from [@Kobzol](https://github.com/Kobzol) and others. PGO is fragile
 and tricky to get working on large programs, and it took much trial and error
-to it configured correctly. But the effort was worth it, with 10-20% wins
-across most invocations in the benchmark suite, with an average of 12.5%!
-Amazing.
+to configure correctly. But the effort was worth it, with 10-20% wins across
+most invocations in the benchmark suite, with an average of 12.5%! Amazing.
 
 We'd love to get PGO working on Mac as well. Unfortunately, this is challenging
 from a CI configuration and maintenance point of view. See the [discussion on

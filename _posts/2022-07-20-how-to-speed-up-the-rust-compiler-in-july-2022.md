@@ -446,7 +446,7 @@ benchmarks, the best being 7%.
 [#96790](https://github.com/rust-lang/rust/pull/96790): In this PR @lqd updated
 the version of jemalloc used by the compiler to the latest (5.3), which reduced
 peak memory usage on many benchmarks, by up to 5% on primary benchmarks and up
-to 10% on secondary benchmarks. It also gaves lots of 1-2% speed wins.
+to 10% on secondary benchmarks. It also gave lots of 1-2% speed wins.
 
 #### Metadata
 
@@ -495,7 +495,7 @@ Many of these were not worth the time and effort to improve, but there were a
 few easy wins.
 
 [#97936](https://github.com/rust-lang/rust/pull/97936):
-`unicode-normalization-0.1.19` has a number of large matches continaing many
+`unicode-normalization-0.1.19` has a number of large matches containing many
 range patterns like `'\u{037A}'..='\u{037F}'`. In this PR I optimized the
 handling of such ranges, for wins on this crates of up to 19%.
 
@@ -530,7 +530,7 @@ part of the "Faster single crate optimization" section has been completed.
 
 The remaining unfinished items are among the more difficult and/or less
 well-specified, and I don't expect every item on the list to be completed this
-year. Also, there is plenty of work that could be done that doesn't git under
+year. Also, there is plenty of work that could be done that doesn't fit under
 the roadmap. As it says in the introduction, the roadmap is "a rough guide,
 rather than a strict prescription". We will keep plugging away at it.
 

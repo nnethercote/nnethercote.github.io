@@ -10,3 +10,6 @@ twitter_username: nnethercote
 theme: minima
 plugins:
   - jekyll-feed
+
+# Always show posts with future dates.
+future: true

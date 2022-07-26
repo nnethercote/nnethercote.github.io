@@ -7,7 +7,7 @@ It has been twenty years since Valgrind 1.0 was released.
 
 ![dragon](/images/2022/07/27/st-george-dragon.png)
 
-[The Valgrind website](valgrind.org) says:
+[The Valgrind website](https://valgrind.org) says:
 
 > Valgrind is an instrumentation framework for building dynamic analysis tools.
 > There are Valgrind tools that can automatically detect many memory management
@@ -159,7 +159,7 @@ expecting that.
 ![award](/images/2022/07/27/pldi-award.jpg){: width="350" }
 
 The second paper was at VEE, entitled [How to Shadow Every Byte of Memory Used
-by a Program](/pubs/shadow-memory.pdf). It gives a nice overview of how
+by a Program](/pubs/shadow-memory2007.pdf). It gives a nice overview of how
 Memcheck tracks extra state about every value in memory.
 
 There were some other awards, too.

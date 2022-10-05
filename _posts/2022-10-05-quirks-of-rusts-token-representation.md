@@ -5,7 +5,7 @@ title: Quirks of Rust's token representation
 
 Like most compilers, `rustc` (the Rust compiler) has a lexer that breaks source
 code into tokens, which are small units such as identifiers, literals,
-operators, and punctuation. Then parser then checks that these tokens are
+operators, and punctuation. The parser then checks that these tokens are
 present in an order that satisfies Rust's grammar.
 
 Rust has many fixed-length tokens, mostly operators and punctuation:

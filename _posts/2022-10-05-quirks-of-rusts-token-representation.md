@@ -12,7 +12,7 @@ Rust has many fixed-length tokens, mostly operators and punctuation:
 - One-char: `;`, `,`, `.`, `(`, `)`, `{`, `}`, `[`, `]`, `@`, `#`, `~`, `?`,
   `:`, `$`, `=`, `!`, `<`, `>`, `-`, `&`, `|`, `+`, `*`, `/`, `^`, `%`.
 - Two-char: `==`, `&&`, `||`, `+=`, `-=`, `*=`, `/=`, `%=`, `^=`, `&=`, `|=`,
-  `..`, `::`, `<-`, `->`, `=>`.
+  `<<`, `>>`, `..`, `::`, `<-`, `->`, `=>`.
 - Three-char: `<<=`, `>>=`, `...`, `..=`.
 
 Every two-char and three-char token starts with a character that is also a
@@ -64,3 +64,8 @@ I'm now wondering whether the AST tokens could be changed to a split
 representation. That way, split representations would be used everywhere. I
 haven't yet investigated how difficult this would be, nor what the benefits
 might be.
+
+**Update:** Aleksey Kladov pointed out an existing
+[issue](https://github.com/rust-lang/rust/issues/63689) suggesting exactly this
+change to AST tokens.
+

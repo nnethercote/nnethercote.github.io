@@ -258,11 +258,13 @@ its significance threshold to adjust. In the meantime, the CC means that
 rustc-perf experts can quickly identify such cases.
 
 Finally, [@Mark-Simulacrum](https://github.com/Mark-Simulacrum) did some
-[experiments](https://rust-lang.zulipchat.com/#narrow/stream/247081-t-compiler.2Fperformance/topic/Disabling.20hyperthreading.2Fturbo)
-with the settings on the machine that does the CI performance runs, and found
-that disabling hyperthreading and turbo boost reduces variance significantly.
-So we have switched those off for good now. This increases the time taken for
-each run by about 10%, which we decided was a good tradeoff.
+[experiments](https://github.com/rust-lang/rustc-perf/issues/1450) with the
+settings on the
+[machine](https://github.com/rust-lang/rustc-perf/blob/master/docs/perf-runner.md)
+that does the CI performance runs, and found that disabling hyperthreading and
+turbo boost reduces variance significantly. So we have switched those off for
+good now. This increases the time taken for each run by about 10%, which we
+decided was a good tradeoff.
 
 ### Cleanups
 

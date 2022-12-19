@@ -5,6 +5,9 @@ description: Be kind and be useful.
 github_username: nnethercote
 linkedin_username: nnethercote
 twitter_username: nnethercote
+mastodon:
+- username: nnethercote
+  instance: mas.to
 
 # Build settings
 theme: minima

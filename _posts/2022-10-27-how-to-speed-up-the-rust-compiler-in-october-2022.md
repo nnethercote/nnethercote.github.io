@@ -278,7 +278,7 @@ some code analysis tools. The most notable of these was RLS, which has now been
 [officially
 deprecated](https://blog.rust-lang.org/2022/07/01/RLS-deprecation.html) in
 favour of rust-analyzer. The exact timing of the removal of
-`-Zsave-analysis`has not yet been decided by the compiler team, though it's
+`-Zsave-analysis` has not yet been decided by the compiler team, though it's
 likely to be within a few months.
 
 [#102769](https://github.com/rust-lang/rust/pull/102769): In this PR I cleaned

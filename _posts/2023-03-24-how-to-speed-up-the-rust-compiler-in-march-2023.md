@@ -243,4 +243,4 @@ As always, these measurements are done on Linux.
 
 This is a smaller improvement than we saw in my last blog post. However,
 compilers tend to get slower over time if careful effort isn't made, so I still
-consider this a positive outcome. Thanks to everybody who contributed!
+consider this a positive outcome. Thank you to everybody who contributed!

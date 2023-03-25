@@ -8,5 +8,5 @@ gem "minima", "~> 2.5"
 
 # Plugins.
 group :jekyll_plugins do
-  gem "jekyll-feed", "~> 0.12"
+  gem "jekyll-feed", "~> 0.15"
 end

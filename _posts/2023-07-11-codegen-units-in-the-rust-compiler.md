@@ -321,7 +321,7 @@ For example, consider this profile of a debug build of `regex-1.5.5`:
 ![Samply screenshot, regex-1.5.5, debug full build](/images/2023/07/11/regex-1.5.5-Debug-Full.png)
 
 Moving from top to bottom we would hope that the LLVM thread durations get
-smaller, but this isn't far from true. CGUs 03 and 11 are particularly badly
+smaller, but this is far from true. CGUs 03 and 11 are particularly badly
 underestimated, and we end up waiting for their threads long after all the
 others have finished.
 
@@ -434,3 +434,4 @@ of them failed. In a lot of cases wins on one metric were balanced or
 outweighed by losses on another. The effort-to-improvement ratio on this one
 was really low.
 
+*Thank you to Wesley Wiser for reviewing most of the PRs mentioned in this post.*

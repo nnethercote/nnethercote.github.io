@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Codegen units in the Rust compiler
+title: Back-end parallelism in the Rust compiler
 ---
 
 This post describes some performance work I have been doing recently on rustc.

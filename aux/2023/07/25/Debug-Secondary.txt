@@ -1,0 +1,69 @@
+# Inputs
+# - sttic: number of `static` items
+# - root_: number of uninlined function items
+# - inlnd: number of inlined function items
+# - bb___: number of basic blocks
+# - ssd__: number of `SourceScopeData`s
+# - stmt_: number of statements
+# - term_: number of `Terminator`s; equal to bb___ (one terminator per basic block)
+# - a_msg: number of assert messages
+# - rval_: number of MIR `Rvalue`s
+# - place: number of MIR `Place`s
+# - proj_: number of MIR projections
+# - proje: number of MIR projection elems
+# - const: number of MIR constants
+# - ty_cn: number of MIR `TyConst`s
+# - ty___: number of MIR `Ty`s
+# - regn_: number of MIR regions
+# - args_: number of `GenericArgsRef`s
+# - lc_dc: number of `LocalDecls`
+# - vdi__: number of `VarDebugInfo`s
+# - local: number of MIR locations(?)
+# - argc_: number of function arguments
+#
+# Note: there will be high levels of correlation among many of these inputs.
+# The more functions you have, the more of everything else (basic blocks,
+# statements, etc.) you'll tend to have.
+#
+# Outputs
+# - t_all__ = t_gen__ + t_opt__ + t_lto__; the main value to be estimated
+# - t_gen__ = time to translate MIR to LLVM IR
+# - t_opt__ = time for LLVM to process the LLVM IR
+# - t_lto__ = time for LLVM to perform thin LTO, if necessary (only for release builds)
+#
+# Other
+# - cgu_name: CGU name; the first part indicates the benchmark name
+# - est__: the current estimation function, approximately equal to sttic + bb___ + stmt_
+
+cgu_name                                     sttic root_ inlnd bb___ ssd__ stmt_ term_ a_msg rval_ place proj_ proje const ty_cn ty___ regn_ args_ lc_dc vdi__ local argc_ est__ t_all__ t_gen__ t_opt__ t_lto__
+CGU-await_call_tree.62e4f077c39384b1-cgu.0__     0     7     0     7     7     7     7     0     7     7     7     0     0     0    14     0     7     7     0    14     0    14     5.6     0.5     5.1     0.0
+CGU-issue_32278_big_array_of_strings.35fbca2de6b292c5-cgu.0     1     9     0    20    14    28    20     0    10    51    51    10    13     0    64     2     4    34    12    78    14    49   206.5    25.6   180.9     0.0
+CGU-ctfe_stress_5.3a17e759a97fdf40-cgu.0____    12    39     0   568    39   331   568   129   331  1234  1234   107  1194     0  2142     1     0   771     1  1274    39   911    68.2     2.3    65.9     0.0
+CGU-deeply_nested_multi.a5f73aaf615c8139-cgu.0     0   224     2  1882  1227  4014  1882    25  1854  6073  6073  2165   788     0  4779   195   838  2553  1331  8454   344  5896    80.1    21.7    58.4     0.0
+CGU-issue_20936_deep_vector.fe51753e61fed52c-cgu.0     0    19     0    80   261   420    80     1   175   641   641    91 136030     0 136418     6   180   236   211   901    29   500   498.3    78.9   419.4     0.0
+CGU-derive.3e08868472f81dc5-cgu.0___________     0   303     0   612   303  1511   612     0  1503  4528  4528   603   906     0  4222   602     0  2413   604  4839   605  2123    75.3    19.6    55.7     0.0
+CGU-externs.a8ea27eed6c08124-cgu.0__________     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     0     2.0     0.2     1.8     0.0
+CGU-inflate.2d6e9465e799a056-cgu.0__________     1    35    12  1580   366  3026  1580   312  2996  8147  8147  1835  1607    56  5820   184   423  2791   409  8260    73  4607   145.2    27.5   117.8     0.0
+CGU-inflate.2d6e9465e799a056-cgu.1__________     0   182     5   900  1501  3161   900    12  1347  4840  4840   893   528     0  3332    86  1009  1846  1374  6834   303  4061    86.1    21.7    64.4     0.0
+CGU-issue_46649_byte_filling_slowing_down_sroa.b0ad09e3dcd19b5f-cgu.0     0    95     3   470   358   634   470     0   479  1554  1554   329   239     1  1154    19   207   639   316  1802   139  1104    36.9    10.6    26.3     0.0
+CGU-issue_58319.5cceb75927211ac6-cgu.0______     0     9     0    20    14    28    20     0    10    51    51    10    13     0    64     2     4    34    12    78    14    48     6.1     1.2     4.9     0.0
+CGU-issue_88862.891ea234b5ad7983-cgu.0______     0    26     1   114   290   498   114     0   196   729   729    94    83     0   539    11   193   292   222  1051    40   612    16.4     6.6     9.7     0.0
+CGU-many_assoc_items.ceb758ec02f6f715-cgu.0_     0     1     0     1     1     1     1     0     1     3     3     0     0     0     3     0     1     2     1     4     1     2     4.7     0.4     4.3     0.0
+CGU-match_stress.50b0bc5333b0eb9e-cgu.0_____     0     3     0     3     3     1     3     0     1     9     9     0     5     0    19     0     0    11     6    10     6     4     4.6     0.6     4.0     0.0
+CGU-projection_caching.a9df6354c7277b54-cgu.0     0   155     0   456   160   389   456     0   371  1244  1244    10   394     0  1171     2   112   614   229  1417   231   845    23.5     4.3    19.2     0.0
+CGU-parser.3832416321258292-cgu.0___________     0   212   117  1344  5815 10114  1344     0  3596 13120 13120  4398  1166     0  9640   251  3735  4589  4706 19939   329 11458   136.8    36.5   100.3     0.0
+CGU-parser.3832416321258292-cgu.1___________     0   271    66  1828   779  2230  1828     1  2016  6587  6587  1672   890     0  5152   356   417  2745   894  7139   515  4058   172.8    34.9   137.8     0.0
+CGU-parser.3832416321258292-cgu.2___________     0   107     5   961   769  1993   961    12  1186  4008  4008   588   652     0  2747   170   570  1491   734  4925   173  2954    78.5    18.9    59.6     0.0
+CGU-parser.3832416321258292-cgu.3___________     0   399     0  1438   670  1187  1438     0   693  2620  2620  1343   337     0  2929   139   169  1589   290  3529   477  2625   120.3    16.2   104.1     0.0
+CGU-parser.3832416321258292-cgu.4___________     0    39     0   387  1198  2143   387     0   789  2827  2827   392   254     0  1718    36   876   974   932  4220    77  2530    45.0     7.7    37.3     0.0
+CGU-parser.3832416321258292-cgu.5___________     0    45     0   215  1570  2000   215     0   635  2820  2820   350    95     0  1745    45  1025   970  1115  4230    65  2215    40.7     9.6    31.1     0.0
+CGU-parser.3832416321258292-cgu.6___________     0    92    11   531   659  1597   531     9   823  2890  2890   678   376     0  2142    87   500  1116   690  3776   142  2128    75.0    15.8    59.2     0.0
+CGU-token_stream_stress_bin.1197a9be1c69f5ab-cgu.0     0     9     0    20    14    28    20     0    10    51    51    10    13     0    64     2     4    34    12    78    14    48     8.8     1.8     7.0     0.0
+CGU-tt_muncher.4e5de6b420dc3cd6-cgu.0_______     0     9     0  2874   316  3830  2874     0  3812 13408 13408    10  3466     0  9870  2302   304  6387   314 13435    14  6704   228.4   122.4   106.0     0.0
+CGU-tuple_stress.b8355867f690a994-cgu.0_____     1     9     0    22    14    33    22     0    15    62    62    11    17     0    75     2     4    40    12    89    14    56    23.6     2.7    20.9     0.0
+CGU-ucd.862a790d8b89ba1b-cgu.0______________    62   177     1  1138   498  2412  1138    27  1685  4240  4240   369   876    42  2798    50   186  1655   534  5140   235  3612    76.5    10.5    66.0     0.0
+CGU-ucd.862a790d8b89ba1b-cgu.1______________    22    68     3   721   422  2118   721   188  1558  4412  4412  1182   421     0  2950    56   201  1553   538  5045   130  2861   184.7    42.4   142.3     0.0
+CGU-ucd.862a790d8b89ba1b-cgu.2______________     4    18     0   474   328  1819   474     2  1049  2304  2304    96   400     0  1191    26   139   752   327  3072    33  2297    45.0    12.7    32.3     0.0
+CGU-issue_32062_equality_relations_complexity.f8ab0bc70651b2b5-cgu.0     0    22     0    59    31    90    59     0    64   220   220    15    53     0   207     2    45   121    37   268    38   149    18.1     3.0    15.1     0.0
+CGU-issue_43572_unused_uses.58030da0f276a376-cgu.0     0     9     0    20    14    28    20     0    10    51    51    10    13     0    64     2     4    34    12    78    14    48     5.3     1.3     4.0     0.0
+CGU-rust_grammar.ba0189da4d5b1dad-cgu.0_____     0     8     1   545    13   943   545     0   909  1347  1347     7   272     0   711     2   367   420    17  1389    13  1488    14.7     2.4    12.3     0.0

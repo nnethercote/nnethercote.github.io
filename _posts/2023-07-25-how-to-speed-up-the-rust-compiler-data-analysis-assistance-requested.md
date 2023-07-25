@@ -100,7 +100,8 @@ more important than the secondary benchmarks, which include stress tests,
 microbenchmarks, and other forms of less realistic code.
 
 I have annotated each file with an explanation of what the columns mean. I hope
-this is enough for others to do useful analysis. Please let me know via Reddit
+this is enough for others to do useful analysis. Please let me know via
+[Reddit](https://www.reddit.com/r/rust/comments/158tcel/how_to_speed_up_the_rust_compiler_data_analysis/)
 or
 [Zulip](https://rust-lang.zulipchat.com/#narrow/stream/247081-t-compiler.2Fperformance/topic/CGU.20size.20estimation.20function)
 if anything is unclear. I can also re-run the data gathering if necessary, e.g.

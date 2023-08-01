@@ -3,6 +3,9 @@ layout: post
 title: "How to speed up the Rust compiler: data analysis assistance requested!"
 ---
 
+**Update**: see the [follow-up
+post](https://nnethercote.github.io/2023/08/01/how-to-speed-up-the-rust-compiler-data-analysis-update.html) for responses and updated data sets.
+
 Are you good at data analysis techniques such as linear regression? Want to
 help speed up the Rust compiler?
 

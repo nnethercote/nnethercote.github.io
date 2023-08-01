@@ -169,6 +169,7 @@ I have again annotated each file with an explanation of what the columns mean.
 I have tried to explain sources of collinearity more clearly this time.
 
 I hope the new data sets will lead to better results! Happy analyzing, and
-thank you in advance. Please direct responses to Reddit,
+thank you in advance. Please direct responses to
+[Reddit](https://www.reddit.com/r/rust/comments/15f3cob/how_to_speed_up_the_rust_compiler_data_analysis/),
 [Zulip](https://rust-lang.zulipchat.com/#narrow/stream/247081-t-compiler.2Fperformance/topic/CGU.20size.20estimation.20function), or email.
 

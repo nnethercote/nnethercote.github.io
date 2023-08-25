@@ -36,6 +36,10 @@ itself is faster (which would make rustc's back-end faster) and how much is
 because LLVM is producing higher quality code (which would make all of rustc
 faster). Either way, it's great work by the LLVM developers!
 
+**(Update)** [#114048](https://github.com/rust-lang/rust/pull/114048): I
+overlooked that the upgrade to LLVM 17 occurred just two weeks ago. It resulted
+in a mean wall-time reduction of 1.91% across all benchmark results!
+
 [#113734](https://github.com/rust-lang/rust/pull/113734): In this PR,
 [@cjgillot](https://github.com/cjgillot) tweaked how some lints are run. This
 gave a mean wall-time reduction of 1.05% across all benchmark results, with

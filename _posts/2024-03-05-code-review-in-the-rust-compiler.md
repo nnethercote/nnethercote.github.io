@@ -285,7 +285,9 @@ There are genuine risks of burnout if people have to do too many reviews. I
 think the compiler team is in a good state right now, and better than a couple
 of months ago, but some other Rust teams (e.g. standard library and Cargo) are
 struggling due to fewer reviewers being available. (And standard library API
-reviews require a lot of time and care.)
+reviews require a lot of time and care.) **Update:** Nilstrieb [pointed
+out](https://mas.to/@nilstrieb@hachyderm.io/112041518618584105) that the
+standard library reviewing situation has improved recently.
 
 When people discuss reviewing challenges, they often look to technical or
 process solutions. I am a bit skeptical about these. There may be room for some

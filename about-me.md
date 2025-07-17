@@ -4,14 +4,24 @@ title: About Me
 ---
 
 I work for [Futurewei Technologies](https://www.futurewei.com/) where I am a
-member of the Rust team. Before that, I worked for
-[Apple](https://www.apple.com/). Before that I worked for
-[Mozilla](https://mozilla.com/), where I had a
-[blog](https://blog.mozilla.com/nnethercote). Many of the links below are to
-posts from that blog.
+member of the Rust team. I have also worked for
+[Apple](https://www.apple.com/), [Mozilla](https://mozilla.com/), and [National
+ICT Australia](https://en.wikipedia.org/wiki/NICTA). I have worked remotely
+since 2009.
 
-I have experience making code faster and more memory-efficient. Examples:
-[the Rust compiler](http://blog.mozilla.org/nnethercote/2020/09/08/how-to-speed-up-the-rust-compiler-one-last-time/),
+I have a [blog](https://nnethercote.github.io/) on this site, and an old
+[Mozilla blog](https://blog.mozilla.com/nnethercote). Many of the links below
+are to posts from those blogs.
+
+I like the [Rust programming language](https://www.rust-lang.org/). I am a
+member of the [Rust compiler
+team](https://www.rust-lang.org/governance/teams/compiler) where I have
+"maintainer" status.
+
+I have a lot of experience making code faster and more memory-efficient.
+Examples: [the Rust compiler](https://github.com/rust-lang/rust/)
+([1](https://nnethercote.github.io/2025/05/22/how-to-speed-up-the-rust-compiler-in-may-2025.html),
+[2](http://blog.mozilla.org/nnethercote/2020/09/08/how-to-speed-up-the-rust-compiler-one-last-time/)),
 [pdf.js](https://mozilla.github.io/pdf.js/)
 ([1](https://blog.mozilla.org/nnethercote/2014/02/07/a-slimmer-and-faster-pdf-js/),
 [2](https://blog.mozilla.org/nnethercote/2014/06/16/an-even-slimmer-pdf-js/)),
@@ -22,19 +32,23 @@ I have written a number of profilers. Examples:
 [DHAT](http://blog.mozilla.org/nnethercote/2019/04/17/a-better-dhat/),
 [ad hoc profiling](http://blog.mozilla.org/nnethercote/2018/07/24/ad-hoc-profiling/),
 [Firefox's about:memory](https://developer.mozilla.org/en-US/docs/Mozilla/Performance/about:memory)
-([one](https://blog.mozilla.org/nnethercote/2011/02/09/a-vision-for-better-memory-profiling-with-aboutmemory/),
-[two](https://blog.mozilla.org/nnethercote/2011/05/02/a-better-aboutmemory-stage-1/),
-[three](https://blog.mozilla.org/nnethercote/2011/05/12/a-better-aboutmemory-stage-1-5/),
-[four](https://blog.mozilla.org/nnethercote/2011/05/23/a-better-aboutmemory-stage-1-75/)),
+([1](https://blog.mozilla.org/nnethercote/2011/02/09/a-vision-for-better-memory-profiling-with-aboutmemory/),
+[2](https://blog.mozilla.org/nnethercote/2011/05/02/a-better-aboutmemory-stage-1/),
+[3](https://blog.mozilla.org/nnethercote/2011/05/12/a-better-aboutmemory-stage-1-5/),
+[4](https://blog.mozilla.org/nnethercote/2011/05/23/a-better-aboutmemory-stage-1-75/)),
 [Firefox's memory reporting](https://developer.mozilla.org/en-US/docs/Mozilla/Performance/Memory_reporting)
-([one](https://blog.mozilla.org/nnethercote/2015/06/03/measuring-data-structure-sizes-firefox-c-vs-servo-rust/),
-[two](https://blog.mozilla.org/nnethercote/2013/12/17/system-wide-memory-measurement-for-firefox-os/)),
+([1](https://blog.mozilla.org/nnethercote/2015/06/03/measuring-data-structure-sizes-firefox-c-vs-servo-rust/),
+[2](https://blog.mozilla.org/nnethercote/2013/12/17/system-wide-memory-measurement-for-firefox-os/)),
 [DMD](https://developer.mozilla.org/en-US/docs/Mozilla/Performance/DMD)
-([one](https://blog.mozilla.org/nnethercote/2012/12/21/dmd/),
-[two](https://blog.mozilla.org/nnethercote/2014/12/11/cumulative-heap-profiling-in-firefox-with-dmd/)).
+([1](https://blog.mozilla.org/nnethercote/2012/12/21/dmd/),
+[2](https://blog.mozilla.org/nnethercote/2014/12/11/cumulative-heap-profiling-in-firefox-with-dmd/)),
+[Rust's
+`-Zmacro-stats`](https://nnethercote.github.io/2025/06/26/how-much-code-does-that-proc-macro-generate.html).
 
 I have often overhauled ugly code to make it simpler, more reliable,
 maintainable, and performant. Examples:
+[Rust dataflow
+analysis](https://nnethercote.github.io/2024/12/19/streamlined-dataflow-analysis-code-in-rustc.html),
 [Firefox static atoms](https://blog.mozilla.org/nnethercote/2018/10/12/slimmer-and-simpler-static-atoms/),
 [Firefox prefs parser](https://blog.mozilla.org/nnethercote/2018/03/09/a-new-preferences-parser-for-firefox/),
 [Firefox startup](https://blog.mozilla.org/nnethercote/2018/02/22/nicer-commands-for-content-processes/),
@@ -65,6 +79,7 @@ I like explaining things. Examples:
 
 I sometimes do things that don't fit neatly into the above categories.
 Examples:
+[A home free from fossil fuels](https://nnethercote.github.io/2025/04/08/a-home-free-from-fossil-fuels.html),
 [Firefox stack fixing](http://blog.mozilla.org/nnethercote/2020/04/15/better-stack-fixing-for-firefox/),
 [OS X Activity Monitor deep-dive](https://blog.mozilla.org/nnethercote/2015/08/26/what-does-the-os-x-activity-monitors-energy-impact-actually-measure/),
 [Power estimates](https://developer.mozilla.org/en-US/docs/Mozilla/Performance/tools_power_rapl),
@@ -76,4 +91,3 @@ I have a [PhD in Valgrind](pubs/phd2004.pdf) and other [publications](pubs).
 I co-won the [Most Influential PLDI Paper
 Award](https://www.sigplan.org/Awards/PLDI/) for a [paper about
 Valgrind](pubs/valgrind2007.pdf).
-

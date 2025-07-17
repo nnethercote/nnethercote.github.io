@@ -7,7 +7,8 @@ I work for [Futurewei Technologies](https://www.futurewei.com/) where I am a
 member of the Rust team. I have also worked for
 [Apple](https://www.apple.com/), [Mozilla](https://mozilla.com/), and [National
 ICT Australia](https://en.wikipedia.org/wiki/NICTA). I have worked remotely
-since 2009.
+since 2009. My [LinkedIn](https://www.linkedin.com/in/nnethercote/) profile has
+a detailed work history.
 
 I have a [blog](https://nnethercote.github.io/) on this site, and an old
 [Mozilla blog](https://blog.mozilla.com/nnethercote). Many of the links below

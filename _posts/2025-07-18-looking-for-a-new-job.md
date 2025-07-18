@@ -123,7 +123,7 @@ in the past 3.75 years I've done a lot of work there. Some highlights:
 - I implemented a new flag [-Zmacro-stats](https://nnethercote.github.io/2025/06/26/how-much-code-does-that-proc-macro-generate.html)
   to measure proc macro code size and then [shrank the size of Bevy's
   `#[derive(Reflect)]` code](https://github.com/bevyengine/bevy/issues/19873).
-  This reduced the `cargo check` time for the `bevy_ui` crate by 50%!
+  This reduced the `cargo check` time for the `bevy_ui` crate by 16%.
 - I helped with the rustc-perf benchmark suite updates in
   [2022](https://hackmd.io/d9uE7qgtTWKDLivy0uoVQw) and
   [2025](https://github.com/rust-lang/rustc-perf/issues/2024).

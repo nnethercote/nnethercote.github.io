@@ -8,8 +8,7 @@ Team](https://www.rust-lang.org/governance/teams/compiler#team-compiler). I
 have worked for [Futurewei Technologies](https://www.futurewei.com/),
 [Apple](https://www.apple.com/), [Mozilla](https://mozilla.com/), and [National
 ICT Australia](https://en.wikipedia.org/wiki/NICTA). I have worked remotely
-since
-2009. My [LinkedIn](https://www.linkedin.com/in/nnethercote/) profile has
+since 2009. My [LinkedIn](https://www.linkedin.com/in/nnethercote/) profile has
 a detailed work history.
 
 I have a [blog](https://nnethercote.github.io/) on this site, and an old

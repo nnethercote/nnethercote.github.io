@@ -3,6 +3,11 @@ layout: post
 title: I am a Rust compiler engineer looking for a new job
 ---
 
+**UPDATE 2025-09-03: I have found a new job and will be starting next week. I
+will post more details soon. Many thanks to everyone who helped publicize this
+post and to everyone who contacted me about possible work. Rust is being used
+in many interesting places!**
+
 For the past 3.75 years I have been fortunate to work on Futurewei's Rust team,
 where I had enormous freedom to "make Rust better" however I see fit. It has
 been the highlight of my career and I am grateful to Sid Askary and other

@@ -134,8 +134,9 @@ cycle. Yuk.
 
 ## The benefits: cargo test
 
-Disabling XProtect also helps for test binaries. Especially pre-2024-edition
-doctests, where [every doctest gets its own
+Disabling XProtect also helps for test binaries. Especially integration tests,
+where each one gets its own binary. And pre-2024-edition doctests, where [each
+one also gets its own
 binary](https://doc.rust-lang.org/edition-guide/rust-2024/rustdoc-doctests.html)!
 And the `cargo-nextest` folks clearly noticed it.
 

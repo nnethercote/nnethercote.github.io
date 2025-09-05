@@ -4,9 +4,9 @@ title: Faster Rust builds on Mac
 ---
 
 Did you know that macOS has a secret setting that can make Rust builds faster?
-It can also make Rust tests faster. It probably even has similar effects for
-other compiled languages such as C, C++, Go, and Swift. It sounds crazy, but
-read on...
+It can also make Rust tests faster (sometimes massively so). It probably even
+has similar effects for other compiled languages such as C, C++, Go, and Swift.
+It sounds crazy, but read on...
 
 ## The problem 
 
@@ -23,8 +23,9 @@ Consider the following output from compiling
 </p>
 
 Time is on the x-axis. Each blue/purple bar is a single invocation of the
-compiler. Each orange bar measures the time taken to execute a build script.
-And the orange bars are quite long.
+compiler. (This image shows only part of the output. The full compilation has
+over 100 crates.) Each orange bar measures the time taken to execute a build
+script. The orange bars are quite long!
 
 [Build scripts](https://doc.rust-lang.org/cargo/reference/build-scripts.html)
 let you do custom tasks that fall outside the normal Cargo workflow. Sometimes
@@ -104,8 +105,9 @@ trade-off.
 
 ## The benefits: cargo build, cargo check
 
-The following image replicates the `cargo build --timings` output from above
-alongside the output from a run with XProtect disabled.
+The following image replicates the `cargo build --timings` partial output from
+above alongside the corresponding partial output from a run with XProtect
+disabled.
 
 <p align="center">
   <img src="/images/2025/09/04/before.png" width=300>
@@ -118,7 +120,10 @@ around 0.06 to 0.14 seconds each on my old MacBook Pro.
 This definitely has the potential to speed up full builds of various Rust
 projects. In this case, the original wild build took 25.9s and the new one took
 25.0s. I didn't do careful measurements to see if those numbers were
-consistent. The exact effect will depend heavily on a project's dependency
+consistent. (Don't read too much into the times taken to compile individual
+crates; the scheduling between the two runs is very different.)
+
+The exact effect will depend heavily on a project's dependency
 graph and the characteristics of your machine, but if build script execution is
 on the critical path it will certainly have an effect.
 
@@ -134,18 +139,20 @@ cycle. Yuk.
 
 ## The benefits: cargo test
 
-Disabling XProtect also helps for test binaries. Especially integration tests,
-where each one gets its own binary. And pre-2024-edition doctests, where [each
-one also gets its own
+Disabling XProtect also helps for test binaries. In fact, this is the area with
+the potential for the biggest speedups, because some test setups involve many
+small binaries. For example, every integration test gets its own binary. And
+every pre-2024-edition doctest [gets its own
 binary](https://doc.rust-lang.org/edition-guide/rust-2024/rustdoc-doctests.html)!
 And the `cargo-nextest` folks clearly noticed it.
 
-The exact effect will depend on the structure of the tests. The Rust compiler
-itself provides a compelling example. Its most comprehensive test suite is
-called `tests/ui/` and involves running almost 4,000 individual executables,
-most of them tiny. [Mads Marquart](https://github.com/madsmtm) found that
-disabling XProtect reduced the runtime of this test suite [from 9m42s to
-3m33s](https://rust-lang.zulipchat.com/#narrow/channel/246057-t-cargo/topic/build.20scripts.20slow.20on.20macOS.3F/near/536314094)! Incredible.
+The Rust compiler itself provides a particularly compelling example. Its
+biggest test suite is called `tests/ui/` and involves running almost 4,000
+individual executables, most of them tiny. [Mads
+Marquart](https://github.com/madsmtm) found that disabling XProtect reduced the
+runtime of this test suite [from 9m42s to
+3m33s](https://rust-lang.zulipchat.com/#narrow/channel/246057-t-cargo/topic/build.20scripts.20slow.20on.20macOS.3F/near/536314094)!
+Incredible.
 
 ## The benefits: other languages
 

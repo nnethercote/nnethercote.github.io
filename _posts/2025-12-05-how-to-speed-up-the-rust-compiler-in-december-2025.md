@@ -1,0 +1,187 @@
+---
+layout: post
+title: How to speed up the Rust compiler in December 2025
+---
+
+It has been more than six months since my [last
+post](https://nnethercote.github.io/2025/05/22/how-to-speed-up-the-rust-compiler-in-may-2025.html)
+on the Rust compiler's performance. In that time I [lost one
+job](https://nnethercote.github.io/2025/07/18/looking-for-a-new-job.html) and
+[gained another](https://nnethercote.github.io/2025/09/16/my-new-job.html). I
+have less time to work directly on the Rust compiler than I used to, but I am
+still doing some stuff, while also working on [other interesting
+things](https://www.vectorware.com/).
+
+## Compiler improvements
+
+[#142095](https://github.com/rust-lang/rust/pull/142095): The compiler has a
+data structure called `VecCache` which is a key-value store used with keys that
+are densely-numbered IDs, such as `CrateNum` or `LocalDefId`. It's a segmented
+vector with increasingly large buckets added as it grows. In this PR [Josh
+Triplett](https://github.com/joshtriplett/) optimized the common case when the
+key is in the first segment, which holds 4096 entries. This gave icount
+reductions across many benchmark runs, beyond 4% in the best cases.
+
+[#148040](https://github.com/rust-lang/rust/pull/142095): In this PR [Ben
+Kimock](https://github.com/saethlin) added a fast path for lowering trivial
+consts. This reduced compile times for the `libc` crate by 5-15%! It's unusual
+to see a change that affects a single real-world crate so much, across all
+compilation scenarios: debug and release, incremental and non-incremental.
+This is a great result. At the time of writing, `libc` is the #12 mostly
+popular crate on crates.io as measured by "recent downloads", and #7 as
+measured by "all-time downloads". This change also reduced icounts for a few
+other benchmarks by up to 10%.
+
+[#147293](https://github.com/rust-lang/rust/pull/147293): In the query system
+there was a value computed on a hot path that was only used within a `debug!`
+call. In this PR I avoided doing that computation unless necessary, which gave
+icount reductions across many benchmark results, more than 3% in the best case.
+This was such a classic micro-optimization that I added it as an example to the
+[Logging and
+Debugging](https://nnethercote.github.io/perf-book/logging-and-debugging.html)
+chapter of the [The Rust Performance
+Book](https://nnethercote.github.io/perf-book/).
+
+[#148706](https://github.com/rust-lang/rust/pull/148706): In this PR
+[dianne](https://github.com/dianne) optimized the handling of temporary scopes.
+This reduced icounts on a number of benchmarks, 3% in the best case. It also
+reduced peak memory usage on some of the secondary benchmarks containing very
+large literals, by 5% in the best cases.
+
+[#143684](https://github.com/rust-lang/rust/pull/143684): In this PR [Nikita
+Popov](https://github.com/nikic) upgraded the LLVM version used by the compiler
+to LLVM 21. In recent years every LLVM update has improved the speed of the
+Rust compiler. In this case the mean icount reduction across all benchmark
+results was an excellent
+[1.70%](https://perf.rust-lang.org/compare.html?start=ec7c02612527d185c379900b613311bc1dcbf7dc&end=dc0bae1db725fbba8524f195f74f680995fd549e&stat=instructions%3Au&nonRelevant=true),
+and the mean cycle count reduction was
+[0.90%](https://perf.rust-lang.org/compare.html?start=ec7c02612527d185c379900b613311bc1dcbf7dc&end=dc0bae1db725fbba8524f195f74f680995fd549e&stat=cycles%3Au&nonRelevant=true),
+but the mean wall-time saw an increase of
+[0.26%](https://perf.rust-lang.org/compare.html?start=ec7c02612527d185c379900b613311bc1dcbf7dc&end=dc0bae1db725fbba8524f195f74f680995fd549e&stat=wall-time&nonRelevant=true).
+Wall-time is the true metric, because it's what users perceive, though it has
+high variance. icounts and cycles usually correlate well to wall-time,
+especially on large changes like this that affect many benchmarks, though this
+case is a counter-example. I'm not quite sure what to make of it; I don't know
+whether the wall-time results on the test machine are representative.
+
+[#148789](https://github.com/rust-lang/rust/pull/148789): In this PR [Mara
+Bos](https://github.com/m-ou-se) reimplemented `format_args!()` and
+`fmt::Arguments` to be more space-efficient. This gave lots of small icount
+wins, and a couple of enormous (30-38%) wins for the `large-workspace` stress
+test. Mara wrote about this [on
+Mastodon](https://hachyderm.io/@Mara/115542621720999480). She also has written
+about prior work on formatting on [her blog](https://blog.m-ou.se/format-args/)
+and in [this tracking issue](https://github.com/rust-lang/rust/issues/99012).
+Lots of great reading there for people who love nitty-gritty optimization
+details, including nice diagrams of how data structures are laid out in memory.
+
+## Proc macro wins in Bevy
+
+In June I
+[added](https://nnethercote.github.io/2025/06/26/how-much-code-does-that-proc-macro-generate.html)
+a new compiler flag `-Zmacro-stats` that measures how much code is generated by
+macros. I [wrote
+previously](https://nnethercote.github.io/2025/08/16/speed-wins-when-fuzzing-rust-code-with-derive-arbitrary.html)
+about how I used it to optimize `#[derive(Arbitrary)]` from the
+[arbitrary](https://crates.io/crates/arbitrary) crate used for fuzzing.
+
+I also used it to streamline the code generated by `#[derive(Reflect)]` in
+[Bevy](https://bevy.org/). This derive is used to implement reflection on many
+types and it produced a *lot* of code. For example, the `bevy_ui` crate was
+around 16,000 lines and 563,000 bytes of source code. The code generated by
+`#[derive(Reflect)]` for types within that crate was around 27,000 lines and
+1,544,000 bytes. Macro expansion almost quadrupled the size of the code, mostly
+because of this one macro!
+
+The code generated by `#[derive(Reflect)]` had a lot of redundancies. I made
+PRs to remove unnecessary
+[calls](https://github.com/bevyengine/bevy/pull/19875),
+[duplicate type bounds](https://github.com/bevyengine/bevy/pull/19876) (and a
+[follow-up](https://github.com/bevyengine/bevy/pull/19922)),
+[`const _` blocks](https://github.com/bevyengine/bevy/pull/19902),
+[closures](https://github.com/bevyengine/bevy/pull/19906),
+[arguments](https://github.com/bevyengine/bevy/pull/19919),
+[trait bounds](https://github.com/bevyengine/bevy/pull/19929),
+[attributes](https://github.com/bevyengine/bevy/pull/19930),
+[impls](https://github.com/bevyengine/bevy/pull/20126), and finally I
+[factored out some repetition](https://github.com/bevyengine/bevy/pull/19944).
+
+After doing this I measured the `bevy_window` crate. The size of the code
+generated by `#[derive(Reflect)]` was reduced by 39%, which reduced `cargo
+check` wall-time for that crate by 16%, and peak memory usage by 5%. And there
+are likely similar improvements across many other crates within Bevy, as well
+as programs that use `#[derive(Reflect)]` themselves.
+
+It's understandable that the generated code was suboptimal. Proc macros aren't
+easy to write; there was previously no easy way to measure the size of the
+generated code; and the generated code was considered good enough because (a)
+it worked, and (b) the compiler would effectively optimize away all the
+redundancies. But in general it is more efficient to optimize away redundancies
+at the generation point, where context-specific and domain-specific information
+is available, rather than relying on sophisticated optimization machinery
+further down the compilation pipeline that has to reconstruct information. And
+it's just less code to parse and represent in memory.
+
+## rustdoc-json
+
+At RustWeek 2025 I had a conversation with [Predrag
+Gruevski](https://github.com/obi1kenobi/) about
+[rustdoc-json](https://crates.io/crates/rustdoc-json) (invoked with the
+`--output-format=json` flag) and its effects on the performance of
+[cargo-semver-checks](https://crates.io/crates/cargo-semver-checks). I spent
+some time looking into it and found one nice win.
+
+[#142335](https://github.com/rust-lang/rust/pull/142335): In this PR I reduced
+the number of allocations done by rustdoc-json. This gave wall-time reductions
+of up to 10% and peak memory usage reductions of up to 8%.
+
+I also tried various other things to improve rustdoc-json's speed, without much
+success. JSON is simple and easy to parse, and rustdoc-json's schema for
+representing Rust code is easy for humans to read. These features are great for
+newcomers and people who want to experiment. It also means the JSON output is
+space-inefficient, which limits the performance of heavy-duty tools like
+cargo-semver-checks that are designed for large codebases. There are some
+obvious space optimizations that could be applied to the JSON schema, like
+shortening field names, omitting fields with default values, and interning
+repeated strings. But these all affect its readability and flexibility. 
+
+The right solution here is probably to introduce a performance-oriented second
+format for the heavy-duty users.
+[#142642](https://github.com/rust-lang/rust/pull/142642) is a draft attempt at
+this. Hopefully progress can be made here in the future.
+
+## Faster compilation of large API crates
+
+Josh Triplett introduced a new experimental flag, `-Zhint-mostly-unused`, which
+can give big compile time wins for people using small fractions of very large
+crates. This is typically the case for certain large API crates, such as
+`windows`, `rustix`, and `aws-sdk-ec2`. Read about it
+[here](https://blog.rust-lang.org/inside-rust/2025/07/15/call-for-testing-hint-mostly-unused/).
+
+## Faster Rust builds on Mac
+
+Did you know that macOS has a secret setting that can make Rust builds faster?
+[No joke!](https://nnethercote.github.io/2025/09/04/faster-rust-builds-on-mac.html)
+
+## General progress
+
+Progress since May must be split into two parts, because in July we changed the machine
+on which the measurements are done.
+
+The [first
+period](https://perf.rust-lang.org/compare.html?start=2b96ddca1272960623e41829439df8dae82d20af&stat=wall-time&showRawData=true&tab=compile&end=fdad98d7463eebcdca94716ec3036c38a8d66f50&nonRelevant=true)
+(2025-05-20 to 2025-06-30) was on the old machine.
+The [second period](https://perf.rust-lang.org/compare.html?start=6988a8fea774a2a20ebebddb7dbf15dd6ef594f9&stat=wall-time&showRawData=true&tab=compile&end=83e49b75e7daf827e4390ae0ccbcb0d0e2c96493&nonRelevant=true) (2025-07-01 to 2025-12-03) was on the new machine.
+
+The mean wall-time changes were moderate improvements (-3.19% and -2.65%). The
+mean peak memory usage changes were a wash (+1.18% and -1.50%). The mean binary
+size changes were small increases (0.45% and 2.56%).
+
+It's good that wall-times went down overall, even if the other metrics were
+mixed. There is a slow but steady stream of bug fixes and new features to the
+compiler, which often hurt performance. In the absence of active performance
+work the natural tendency for a compiler is to get slower, so I view even small
+improvements as a win.
+
+The new machine reduced wall-times by about 20%. It's worth upgrading your
+hardware, if you can!

@@ -22,7 +22,7 @@ Triplett](https://github.com/joshtriplett/) optimized the common case when the
 key is in the first segment, which holds 4096 entries. This gave icount
 reductions across many benchmark runs, beyond 4% in the best cases.
 
-[#148040](https://github.com/rust-lang/rust/pull/142095): In this PR [Ben
+[#148040](https://github.com/rust-lang/rust/pull/148040): In this PR [Ben
 Kimock](https://github.com/saethlin) added a fast path for lowering trivial
 consts. This reduced compile times for the `libc` crate by 5-15%! It's unusual
 to see a change that affects a single real-world crate so much, across all

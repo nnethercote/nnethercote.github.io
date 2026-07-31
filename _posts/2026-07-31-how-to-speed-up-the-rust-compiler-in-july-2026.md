@@ -159,12 +159,12 @@ two worst crates by 40%.
 
 There has been a welcome uptick in the amount of performance work being done
 recently and I want to highlight two newcomers. The first is xmakro, who was
-mentioned four times above. The second is [Arya
-Dradjica](https://github.com/bal-e), the creator of
+mentioned four times above. The second is [arya
+dradjica](https://github.com/bal-e), the creator of
 [Krabby](https://bal-e.org/speed/krabby/), an experimental Rust compiler
-focused on speed. Arya is now getting [financial
+focused on speed. arya is now getting [financial
 support](https://bal-e.org/speed/krabby/2026/rustnl-internship/) to work on
-both Krabby and rustc. Arya's rustc work is currently focused on macro
+both Krabby and rustc. arya's rustc work is currently focused on macro
 expansion, where she has already made a few small performance improvements
 (e.g.
 [#158976](https://github.com/rust-lang/rust/pull/158976),

@@ -3,10 +3,13 @@ layout: page
 title: About Me
 ---
 
-I work for [VectorWare](https://vectorware.com). I have previously worked for
+I work for [Hexcat](https://hexcat.nl/). I have previously worked for
+[VectorWare](https://vectorware.com),
 [Futurewei Technologies](https://www.futurewei.com/),
-[Apple](https://www.apple.com/), [Mozilla](https://mozilla.com/), and [National
-ICT Australia](https://en.wikipedia.org/wiki/NICTA). I have worked remotely
+[Apple](https://www.apple.com/),
+[Mozilla](https://mozilla.com/), and
+[National ICT Australia](https://en.wikipedia.org/wiki/NICTA).
+I have worked remotely
 since 2009. My [LinkedIn](https://www.linkedin.com/in/nnethercote/) profile has
 a detailed work history.
 

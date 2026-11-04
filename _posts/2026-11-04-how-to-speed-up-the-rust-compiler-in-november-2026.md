@@ -3,8 +3,9 @@ layout: post
 title: How to speed up the Rust compiler in November 2026
 ---
 
-My first month working on Rust compiler performance for Hexcat is over and it's
-time to see some of what's happened since my [last
+My first month working on Rust compiler performance for
+[Hexcat](https://hexcat.nl/) is over and it's time to see some of what's
+happened since my [last
 post](https://nnethercote.github.io/2026/09/30/how-to-speed-up-the-rust-compiler-in-september-2026.html).
 
 ## Spans
